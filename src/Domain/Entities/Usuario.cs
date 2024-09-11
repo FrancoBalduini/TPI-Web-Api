@@ -15,5 +15,6 @@ namespace Domain.Entities
         public string Contrasenia { get; set; } = string.Empty;
         public string NombreUser { get; set; } = string.Empty;
 
+
     }
 }

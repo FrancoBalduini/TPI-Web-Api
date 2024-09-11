@@ -8,6 +8,8 @@ namespace Domain.Entities
 {
     public class Cliente : Usuario
     {
-        public ICollection <Mensaje> Mensajes { get; set; }
+        public ICollection <Mensaje> Mensajes { get; set; } = new List<Mensaje>();
+        public ICollection<Bicicleta> Bicicletas { get; set; } = new List<Bicicleta>();
+
     }
 }
