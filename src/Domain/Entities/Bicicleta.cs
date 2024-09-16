@@ -11,6 +11,8 @@ namespace Domain.Entities
         public int Id { get; set; }
         public string Marca { get; set; } = string.Empty;
         public string Modelo { get; set; } = string.Empty;
+        public Cliente Cliente { get; set; } 
+        public int? ClienteId { get; set; }
         public ICollection<Mantenimiento> Mantenimientos { get; set; } = new List<Mantenimiento>();
     }
 }

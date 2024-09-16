@@ -11,6 +11,10 @@ namespace Domain.Entities
     {
         public int Id { get; set; }
         public int IdUsuario { get; set; }
+
+        public Cliente Cliente { get; set; }
+
+        public int ClienteId { get; set; }
         public string Mensajes { get; set; } = string.Empty;
         public DateTime FechaDeCreacion { get; set; }
         public EstadoMensaje EstadoMensaje { get; set; }
