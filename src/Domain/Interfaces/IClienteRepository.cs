@@ -7,7 +7,7 @@ namespace Domain.Interfaces
     public interface IClienteRepository
     {
         Cliente GetClienteById(int id);
-        IEnumerable<Cliente> GetAllClientes();
+        IEnumerable<ClienteDTO> GetAllClientes();
         void CreateCliente(Cliente cliente);
         void UpdateCliente(Cliente cliente);
         void DeleteCliente(int id);
