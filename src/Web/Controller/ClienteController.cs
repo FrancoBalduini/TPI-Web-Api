@@ -1,8 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models.Request;
-using Application.Models.Requests;
 using Domain.Entities;
-using Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
