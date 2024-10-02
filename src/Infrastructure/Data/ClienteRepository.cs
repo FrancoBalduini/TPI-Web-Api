@@ -15,7 +15,7 @@ namespace Infrastructure.Data
         public Cliente GetById(int id) 
         {
 
-            return _clienteList.FirstOrDefault(c => c.Id == id)?? throw new NotFound;
+            return _clienteList.FirstOrDefault(c => c.Id == id)?? throw new NotFoundException;
             
         }
 

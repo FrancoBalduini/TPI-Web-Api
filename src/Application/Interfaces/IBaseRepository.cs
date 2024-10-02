@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public interface IBaseRepository <T>
+    public interface IBaseRepository<T> where T : class
     {
-        T GetById (int id);
-        List<T> GetAll ();
-        void Create (T entity);
-        void Update (T entity);
-        void Delete (int id);
+        T? GetById(int id);
+        List<T> GetAll();
+        T Add(T entity);
+        void Update(T entity);
+        void Delete(T entity);
+        void SaveChanges ();
     }
 }
