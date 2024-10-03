@@ -8,36 +8,15 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data
 {
-    public class ClienteRepository : IClienteRepository
+    public class ClienteRepository : BaseRepository<Cliente>, IClienteRepository
     {
-        private readonly List<Cliente> _clienteList = new List<Cliente>();
-
-        public Cliente GetById(int id) 
+        private readonly ApplicationContext _context;
+        public ClienteRepository(ApplicationContext context) : base(context) 
         {
-
-            return _clienteList.FirstOrDefault(c => c.Id == id)?? throw new NotFoundException;
-            
+            _context = context;
         }
 
-        public List<Cliente> GetAll()
-        {
-            return _clienteList;
-        }
-
-        public void Create(Cliente cliente) 
-        {
-            _clienteList.Add(cliente);
-        }
-
-        public void Update(Cliente cliente)
-        {
-            var cualquiercosa
-        }
-
-        public void Delete(Cliente cliente) 
-        { 
-            _clienteList.Remove(cliente);
-        }
+    }
 
 
 }

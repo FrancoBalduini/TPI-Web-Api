@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Application.Models;
+using Application.Models.Request;
+using Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +15,8 @@ namespace Application.Interfaces
         List<ClienteDTO> GetAll ();
         ClienteDTO GetById (int id);
 
-        void Update(int id,ClienteUpdateRequest clienteUpdateRequest);
+        void Update(int id, Cliente cliente);
 
-        ClienteDTO Create(ClienteCreateRequest clienteCreateRequest);
+        Cliente Create(Cliente cliente);
     }
 }
