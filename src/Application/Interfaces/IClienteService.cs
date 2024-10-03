@@ -12,8 +12,8 @@ namespace Application.Interfaces
     public interface IClienteService
     {
         void Delete (int id);
-        List<ClienteDTO> GetAll ();
-        ClienteDTO GetById (int id);
+        List<Cliente> GetAll ();
+        Cliente GetById (int id);
 
         void Update(int id, Cliente cliente);
 

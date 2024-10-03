@@ -28,19 +28,17 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<string>("Marca")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Modelo")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClienteId");
 
-                    b.ToTable("Bicicletas");
+                    b.ToTable("Bicicleta");
                 });
 
             modelBuilder.Entity("Domain.Entities.Cliente", b =>
@@ -51,22 +49,27 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<string>("Apellido")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Contrasenia")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("NombreUser")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -96,42 +99,11 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("Mantenimiento");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Mensaje", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ClienteId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("EstadoMensaje")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("FechaDeCreacion")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("IdUsuario")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Mensajes")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClienteId");
-
-                    b.ToTable("Mensajes");
-                });
-
             modelBuilder.Entity("Domain.Entities.Bicicleta", b =>
                 {
                     b.HasOne("Domain.Entities.Cliente", "Cliente")
                         .WithMany("Bicicletas")
-                        .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ClienteId");
 
                     b.Navigation("Cliente");
                 });
@@ -143,17 +115,6 @@ namespace Infrastructure.Data.Migrations
                         .HasForeignKey("BicicletaId");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Mensaje", b =>
-                {
-                    b.HasOne("Domain.Entities.Cliente", "Cliente")
-                        .WithMany("Mensajes")
-                        .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cliente");
-                });
-
             modelBuilder.Entity("Domain.Entities.Bicicleta", b =>
                 {
                     b.Navigation("Mantenimientos");
@@ -162,8 +123,6 @@ namespace Infrastructure.Data.Migrations
             modelBuilder.Entity("Domain.Entities.Cliente", b =>
                 {
                     b.Navigation("Bicicletas");
-
-                    b.Navigation("Mensajes");
                 });
 #pragma warning restore 612, 618
         }
