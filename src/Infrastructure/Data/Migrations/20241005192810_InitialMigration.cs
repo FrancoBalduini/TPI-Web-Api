@@ -29,22 +29,38 @@ namespace Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Bicicleta",
+                name: "Dueño",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Marca = table.Column<string>(type: "TEXT", nullable: false),
-                    Modelo = table.Column<string>(type: "TEXT", nullable: false),
-                    ClienteId = table.Column<int>(type: "INTEGER", nullable: true)
+                    Nombre = table.Column<string>(type: "TEXT", nullable: false),
+                    Apellido = table.Column<string>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false),
+                    Contrasenia = table.Column<string>(type: "TEXT", nullable: false),
+                    NombreUser = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Bicicleta", x => x.Id);
+                    table.PrimaryKey("PK_Dueño", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Talleres",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Nombre = table.Column<string>(type: "TEXT", nullable: false),
+                    DueñoId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Talleres", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Bicicleta_Clientes_ClienteId",
-                        column: x => x.ClienteId,
-                        principalTable: "Clientes",
+                        name: "FK_Talleres_Dueño_DueñoId",
+                        column: x => x.DueñoId,
+                        principalTable: "Dueño",
                         principalColumn: "Id");
                 });
 
@@ -56,40 +72,43 @@ namespace Infrastructure.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     FechaIngreso = table.Column<DateTime>(type: "TEXT", nullable: false),
                     FechaSalida = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    BicicletaId = table.Column<int>(type: "INTEGER", nullable: true)
+                    TallerId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Mantenimiento", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Mantenimiento_Bicicleta_BicicletaId",
-                        column: x => x.BicicletaId,
-                        principalTable: "Bicicleta",
+                        name: "FK_Mantenimiento_Talleres_TallerId",
+                        column: x => x.TallerId,
+                        principalTable: "Talleres",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bicicleta_ClienteId",
-                table: "Bicicleta",
-                column: "ClienteId");
+                name: "IX_Mantenimiento_TallerId",
+                table: "Mantenimiento",
+                column: "TallerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Mantenimiento_BicicletaId",
-                table: "Mantenimiento",
-                column: "BicicletaId");
+                name: "IX_Talleres_DueñoId",
+                table: "Talleres",
+                column: "DueñoId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Clientes");
+
+            migrationBuilder.DropTable(
                 name: "Mantenimiento");
 
             migrationBuilder.DropTable(
-                name: "Bicicleta");
+                name: "Talleres");
 
             migrationBuilder.DropTable(
-                name: "Clientes");
+                name: "Dueño");
         }
     }
 }

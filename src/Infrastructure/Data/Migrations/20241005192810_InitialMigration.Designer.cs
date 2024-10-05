@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20241003022834_InitialMigration")]
+    [Migration("20241005192810_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -19,30 +19,6 @@ namespace Infrastructure.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
-
-            modelBuilder.Entity("Domain.Entities.Bicicleta", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("ClienteId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Marca")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Modelo")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClienteId");
-
-                    b.ToTable("Bicicleta");
-                });
 
             modelBuilder.Entity("Domain.Entities.Cliente", b =>
                 {
@@ -80,13 +56,41 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("Clientes");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Mantenimiento", b =>
+            modelBuilder.Entity("Domain.Entities.Dueño", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("BicicletaId")
+                    b.Property<string>("Apellido")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Contrasenia")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NombreUser")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Dueño");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Mantenimiento", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("FechaIngreso")
@@ -95,37 +99,60 @@ namespace Infrastructure.Data.Migrations
                     b.Property<DateTime>("FechaSalida")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("TallerId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("BicicletaId");
+                    b.HasIndex("TallerId");
 
                     b.ToTable("Mantenimiento");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Bicicleta", b =>
+            modelBuilder.Entity("Domain.Entities.Taller", b =>
                 {
-                    b.HasOne("Domain.Entities.Cliente", "Cliente")
-                        .WithMany("Bicicletas")
-                        .HasForeignKey("ClienteId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Navigation("Cliente");
+                    b.Property<int?>("DueñoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DueñoId");
+
+                    b.ToTable("Talleres");
                 });
 
             modelBuilder.Entity("Domain.Entities.Mantenimiento", b =>
                 {
-                    b.HasOne("Domain.Entities.Bicicleta", null)
+                    b.HasOne("Domain.Entities.Taller", null)
                         .WithMany("Mantenimientos")
-                        .HasForeignKey("BicicletaId");
+                        .HasForeignKey("TallerId");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Bicicleta", b =>
+            modelBuilder.Entity("Domain.Entities.Taller", b =>
+                {
+                    b.HasOne("Domain.Entities.Dueño", "Dueño")
+                        .WithMany("Talleres")
+                        .HasForeignKey("DueñoId");
+
+                    b.Navigation("Dueño");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Dueño", b =>
+                {
+                    b.Navigation("Talleres");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Taller", b =>
                 {
                     b.Navigation("Mantenimientos");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Cliente", b =>
-                {
-                    b.Navigation("Bicicletas");
                 });
 #pragma warning restore 612, 618
         }

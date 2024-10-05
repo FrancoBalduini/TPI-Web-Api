@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,6 +37,8 @@ namespace Infrastructure.Data
 
         public DbSet<Cliente> Clientes { get; set; }
 
+        public DbSet<Taller> Talleres { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Cliente>(entity =>
@@ -68,6 +71,17 @@ namespace Infrastructure.Data
 
 
             });
+
+            modelBuilder.Entity<Taller>(e =>
+            {
+                // Relacion entre taller - dueño 
+                // un taller posee un dueño, e.HasOne(t => t.Dueño) e es entidad y t taller
+                // un dueño puede tener varios talleres, .WithMany(d => d.Talleres) d es dueño
+                e.HasOne(t => t.Dueño)
+                 .WithMany(d => d.Talleres)
+                 .HasForeignKey(t => t.DueñoId); 
+            });
+            
         }
 
     }
