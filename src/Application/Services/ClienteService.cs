@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Models;
 using Application.Models.Request;
+using AutoMapper;
 using Domain.Entities;
 using Domain.Exceptions;
 using System;
@@ -14,27 +15,31 @@ namespace Application.Services
     public class ClienteService : IClienteService
     {
         private readonly IClienteRepository _clienteRepository;
-        public ClienteService(IClienteRepository clienteRepository) 
+        private readonly IMapper _mapper;
+        public ClienteService(IClienteRepository clienteRepository, IMapper mapper) 
         {
             _clienteRepository = clienteRepository;
+            _mapper = mapper;
 
         }
 
-        public Cliente Create(Cliente cliente)
+        public ClienteDTO Create(ClienteCreateRequest clienteCreateRequest)
         {
+            var cliente = _mapper.Map<Cliente>(clienteCreateRequest);
             _clienteRepository.Add(cliente);
-            return cliente;
+            return _mapper.Map<ClienteDTO>(cliente);
         }
 
-        public List<Cliente> GetAll()
+        public List<ClienteDTO> GetAll()
         {
-            return _clienteRepository.GetAll();
+            var clientes = _clienteRepository.GetAll();
+            return _mapper.Map<List<ClienteDTO>>(clientes);
         }
 
-        public Cliente GetById(int id) 
+        public ClienteDTO GetById(int id) 
         {
             var cliente = _clienteRepository.GetById(id) ?? throw new NotFoundException($"No se encontró el ID ingresado: {id}");
-            return cliente;
+            return _mapper.Map<ClienteDTO>(cliente);
         }
 
         public void Delete(int id) 
@@ -43,15 +48,12 @@ namespace Application.Services
             _clienteRepository.Delete(clienteid);
         }
 
-        public void Update(int id, Cliente cliente)
+        public void Update(int id, ClienteUpdateRequest clienteUpdateRequest)
         {
-            var clienteidUpdate = _clienteRepository.GetById(id) ?? throw new NotFoundException($"No se encontró el ID ingresado: {id}");
-            clienteidUpdate.Nombre = cliente.Nombre;
-            clienteidUpdate.Apellido = cliente.Apellido;
-            clienteidUpdate.Email = cliente.Email;
-            clienteidUpdate.Contrasenia = cliente.Contrasenia;
-            clienteidUpdate.NombreUser = cliente.NombreUser;
-            _clienteRepository.Update(clienteidUpdate);
+            var cliente = _clienteRepository.GetById(id) ?? throw new NotFoundException($"No se encontró el ID ingresado: {id}");
+            _mapper.Map(clienteUpdateRequest, cliente);
+            _clienteRepository.Update(cliente);
+
         }
     }
 }

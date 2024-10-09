@@ -1,4 +1,7 @@
 ﻿using Application.Interfaces;
+using Application.Models;
+using Application.Models.Request;
+using Application.Services;
 using Domain.Entities;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Http;
@@ -17,38 +20,64 @@ namespace Web.Controller
         }
 
         [HttpGet]
-        public ActionResult<List<Cliente>> GetAll() 
+        public ActionResult<List<ClienteDTO>> GetAll() 
         {
-            var cliente = _clienteService.GetAll();
-            return Ok(cliente);
+            return _clienteService.GetAll();
         }
-        [HttpGet("{id}")]
 
-        public ActionResult<Cliente> GetById(int id)
+        [HttpGet("{id}")]
+        public ActionResult<ClienteDTO> GetById(int id)
         {
-            var cliente = _clienteService.GetById(id);
-            return Ok(cliente);
+            try
+            {
+                return _clienteService.GetById(id);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPost]
-        public ActionResult<Cliente> Create([FromBody]Cliente cliente) 
+        public ActionResult<ClienteDTO> Create([FromBody]ClienteCreateRequest   clienteCreateRequest) 
         {
-            var clienteCreado = _clienteService.Create(cliente);
-            return Ok(clienteCreado);
+            try
+            {
+                var nuevoCliente = _clienteService.Create(clienteCreateRequest);
+                return CreatedAtAction(nameof(GetById), new { id = nuevoCliente.Id }, nuevoCliente);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromRoute]int id,[FromBody] Cliente cliente) 
+        public IActionResult Update([FromRoute]int id,[FromBody] ClienteUpdateRequest clienteUpdateRequest) 
         {
-            _clienteService.Update(id, cliente);
-            return NoContent();
+            try
+            {
+                _clienteService.Update(id, clienteUpdateRequest);
+                return NoContent();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute]int id) 
         {
-            _clienteService.Delete(id);
-            return NoContent();
+            try
+            {
+                _clienteService.Delete(id);
+                return NoContent();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
     }
 }

@@ -22,7 +22,10 @@ namespace Application.Profiles
                 // Mapea la propiedad 'DueñoNombre' en el DTO, concatenando el nombre y apellido del dueño
                 // si existe, o asignando una cadena vacía si no hay dueño asociado.
                 .ForMember(dest => dest.DueñoNombre, opt => opt.MapFrom(src => src.Dueño != null ? $"{src.Dueño.Nombre} {src.Dueño.Apellido}" : string.Empty));
-
+            
+            CreateMap<ClienteCreateRequest, Cliente>();
+            CreateMap<ClienteUpdateRequest, Cliente>();
+            CreateMap<Cliente, ClienteDTO>();
         }
     }
 }

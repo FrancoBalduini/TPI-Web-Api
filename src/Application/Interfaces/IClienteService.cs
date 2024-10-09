@@ -12,11 +12,11 @@ namespace Application.Interfaces
     public interface IClienteService
     {
         void Delete (int id);
-        List<Cliente> GetAll ();
-        Cliente GetById (int id);
+        List<ClienteDTO> GetAll ();
+        ClienteDTO GetById (int id);
 
-        void Update(int id, Cliente cliente);
+        void Update(int id, ClienteUpdateRequest clienteUpdateRequest);
 
-        Cliente Create(Cliente cliente);
+        ClienteDTO Create(ClienteCreateRequest clienteCreateRequest);
     }
 }

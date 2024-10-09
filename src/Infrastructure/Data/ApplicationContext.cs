@@ -7,25 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-//namespace Infrastructure.Data
-//{
-//    public class ApplicationContext : DbContext
-//    {
-        
-//        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) 
-//        {
-        
-
-//        }
-//        public DbSet<Cliente> clientes { get; set; }
-
-//        protected override void OnModelCreating(ModelBuilder modelBuilder) 
-//        {
-//            modelBuilder.Entity<Cliente>();
-
-//        }
-//    }
-//}
 
 namespace Infrastructure.Data
 {
@@ -81,6 +62,8 @@ namespace Infrastructure.Data
                  .WithMany(d => d.Talleres)
                  .HasForeignKey(t => t.DueñoId); 
             });
+
+            base.OnModelCreating(modelBuilder);
             
         }
 
