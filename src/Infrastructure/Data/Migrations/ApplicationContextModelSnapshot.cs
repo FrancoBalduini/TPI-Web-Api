@@ -17,6 +17,30 @@ namespace Infrastructure.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
+            modelBuilder.Entity("Domain.Entities.Bicicleta", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ClienteId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Marca")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Modelo")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClienteId");
+
+                    b.ToTable("Bicicletas");
+                });
+
             modelBuilder.Entity("Domain.Entities.Cliente", b =>
                 {
                     b.Property<int>("Id")
@@ -90,6 +114,9 @@ namespace Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("BicicletaId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("FechaIngreso")
                         .HasColumnType("TEXT");
 
@@ -101,6 +128,8 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BicicletaId");
+
                     b.HasIndex("TallerId");
 
                     b.ToTable("Mantenimiento");
@@ -111,6 +140,10 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Direccion")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("DueñoId")
                         .HasColumnType("INTEGER");
@@ -126,8 +159,22 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("Talleres");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Bicicleta", b =>
+                {
+                    b.HasOne("Domain.Entities.Cliente", "Cliente")
+                        .WithMany("Bicicletas")
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Cliente");
+                });
+
             modelBuilder.Entity("Domain.Entities.Mantenimiento", b =>
                 {
+                    b.HasOne("Domain.Entities.Bicicleta", null)
+                        .WithMany("Mantenimientos")
+                        .HasForeignKey("BicicletaId");
+
                     b.HasOne("Domain.Entities.Taller", null)
                         .WithMany("Mantenimientos")
                         .HasForeignKey("TallerId");
@@ -140,6 +187,16 @@ namespace Infrastructure.Data.Migrations
                         .HasForeignKey("DueñoId");
 
                     b.Navigation("Dueño");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Bicicleta", b =>
+                {
+                    b.Navigation("Mantenimientos");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Cliente", b =>
+                {
+                    b.Navigation("Bicicletas");
                 });
 
             modelBuilder.Entity("Domain.Entities.Dueño", b =>

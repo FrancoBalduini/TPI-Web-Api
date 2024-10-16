@@ -31,15 +31,17 @@ builder.Services.AddDbContext<ApplicationContext>(dbContextOptions => dbContextO
 // Repository
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<ITallerRepository, TallerRepository>();
+builder.Services.AddScoped<IBicicletaRepository, BicicletaRepository>();
 // Registra un repositorio base genérico para las entidades,
 // permitiendo que se realicen operaciones comunes de acceso a datos.
 builder.Services.AddScoped<IBaseRepository<Cliente>, BaseRepository<Cliente>>();
 builder.Services.AddScoped<IBaseRepository<Taller>, BaseRepository<Taller>>();
-
+builder.Services.AddScoped<IBaseRepository<Bicicleta>, BaseRepository<Bicicleta>>();
 
 // Service
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<ITallerService, TallerService>();
+builder.Services.AddScoped<IBicicletaService, BicicletaService>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile)); //AutoMapper
 

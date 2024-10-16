@@ -26,6 +26,11 @@ namespace Application.Profiles
             CreateMap<ClienteCreateRequest, Cliente>();
             CreateMap<ClienteUpdateRequest, Cliente>();
             CreateMap<Cliente, ClienteDTO>();
+
+            CreateMap<BicicletaCreateRequest, Bicicleta>();
+            CreateMap<BicicletaUpdateRequest, Bicicleta>();
+            CreateMap<Bicicleta, BicicletaDTO>()
+                .ForMember(dest => dest.ClienteNombre, opt => opt.MapFrom(src => src.Cliente != null ? $"{src.Cliente.Nombre} {src.Cliente.Apellido}" : string.Empty)); ;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Application.Models.Request
 {
     public class TallerUpdateRequest
     {
-        public int Id { get; set; }
+        private int Id { get; set; }
 
         public string Nombre { get; set; } = string.Empty;
 

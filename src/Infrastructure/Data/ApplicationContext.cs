@@ -15,7 +15,7 @@ namespace Infrastructure.Data
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
         }
-
+        public DbSet<Bicicleta> Bicicletas { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
 
         public DbSet<Taller> Talleres { get; set; }
@@ -61,6 +61,17 @@ namespace Infrastructure.Data
                 e.HasOne(t => t.Dueño)
                  .WithMany(d => d.Talleres)
                  .HasForeignKey(t => t.DueñoId); 
+            });
+
+            modelBuilder.Entity<Bicicleta>(e =>
+            {
+                // Relacion entre bicicleta - cliente 
+                // una bicicleta posee un cliente, e.HasOne(b => b.Cliente) e es entidad y b bicicleta
+                // un cliente puede tener varias bicilcetas, .WithMany(c => c.Bicicletas) c es cliente
+                e.HasOne(b => b.Cliente)
+                 .WithMany(c => c.Bicicletas)
+                 .HasForeignKey(b => b.ClienteId)
+                 .OnDelete(DeleteBehavior.Restrict); //**lo dejamos a revision**
             });
 
             base.OnModelCreating(modelBuilder);
