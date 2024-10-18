@@ -27,6 +27,10 @@ namespace Application.Profiles
             CreateMap<ClienteUpdateRequest, Cliente>();
             CreateMap<Cliente, ClienteDTO>();
 
+            CreateMap<DueñoCreateRequest, Dueño>();
+            CreateMap<DueñoUpdateRequest, Dueño>();
+            CreateMap<Dueño, DueñoDTO>();
+
             CreateMap<BicicletaCreateRequest, Bicicleta>();
             CreateMap<BicicletaUpdateRequest, Bicicleta>();
             CreateMap<Bicicleta, BicicletaDTO>()

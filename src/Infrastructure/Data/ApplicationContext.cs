@@ -19,39 +19,12 @@ namespace Infrastructure.Data
         public DbSet<Cliente> Clientes { get; set; }
 
         public DbSet<Taller> Talleres { get; set; }
+        public DbSet<Dueño> Dueños { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Cliente>(entity =>
-            {
-
-                entity.HasKey(c => c.Id);
-
-                entity.Property(c => c.Id)
-                      .ValueGeneratedOnAdd();
-
-                entity.Property(c => c.Nombre)
-                      .IsRequired()
-                      .HasMaxLength(50);
-
-                entity.Property(c => c.Apellido)
-                      .IsRequired()
-                      .HasMaxLength(50);
-
-                entity.Property(c => c.Email)
-                      .IsRequired()
-                      .HasMaxLength(100);
-
-                entity.Property(c => c.Contrasenia)
-                      .IsRequired()
-                      .HasMaxLength(100);
-
-                entity.Property(c => c.NombreUser)
-                      .IsRequired()
-                      .HasMaxLength(50);
-
-
-            });
+            modelBuilder.Entity<Cliente>().ToTable("Tabla Clientes");
+            modelBuilder.Entity<Dueño>().ToTable("Tabla Dueños");
 
             modelBuilder.Entity<Taller>(e =>
             {
@@ -70,11 +43,26 @@ namespace Infrastructure.Data
                 // un cliente puede tener varias bicilcetas, .WithMany(c => c.Bicicletas) c es cliente
                 e.HasOne(b => b.Cliente)
                  .WithMany(c => c.Bicicletas)
-                 .HasForeignKey(b => b.ClienteId)
-                 .OnDelete(DeleteBehavior.Restrict); //**lo dejamos a revision**
+                 .HasForeignKey(b => b.ClienteId);
+                 
+            });
+
+            modelBuilder.Entity<Dueño>(e =>
+            {
+                e.HasMany(d => d.Talleres)
+                .WithOne(t => t.Dueño)
+                .HasForeignKey(t => t.DueñoId);
+            });
+
+            modelBuilder.Entity<Cliente>(e =>
+            {
+                e.HasMany(d => d.Bicicletas)
+                .WithOne(t => t.Cliente)
+                .HasForeignKey(t => t.ClienteId);
             });
 
             base.OnModelCreating(modelBuilder);
+
             
         }
 

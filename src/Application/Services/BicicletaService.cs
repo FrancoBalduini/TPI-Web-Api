@@ -9,6 +9,7 @@ using Application.Models;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Exceptions;
+using Domain.Interfaces;
 
 namespace Application.Services
 {

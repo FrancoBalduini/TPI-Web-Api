@@ -4,6 +4,7 @@ using Application.Models.Request;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Exceptions;
+using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

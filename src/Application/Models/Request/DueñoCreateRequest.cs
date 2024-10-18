@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Application.Models.Request
 {
-    public class ClienteUpdateRequest
+    public class DueñoCreateRequest
     {
-        private int Id { get; set; }
         public string Nombre { get; set; } = string.Empty;
         public string Apellido { get; set; } = string.Empty;
         [EmailAddress]

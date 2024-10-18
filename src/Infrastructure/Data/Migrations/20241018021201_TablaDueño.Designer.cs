@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20241016174123_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20241018021201_TablaDueño")]
+    partial class TablaDueño
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,32 +52,27 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<string>("Apellido")
                         .IsRequired()
-                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Contrasenia")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("NombreUser")
                         .IsRequired()
-                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clientes");
+                    b.ToTable("Tabla Clientes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Dueño", b =>
@@ -108,7 +103,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Dueño");
+                    b.ToTable("Tabla Dueños", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Mantenimiento", b =>
@@ -166,8 +161,7 @@ namespace Infrastructure.Data.Migrations
                 {
                     b.HasOne("Domain.Entities.Cliente", "Cliente")
                         .WithMany("Bicicletas")
-                        .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("ClienteId");
 
                     b.Navigation("Cliente");
                 });

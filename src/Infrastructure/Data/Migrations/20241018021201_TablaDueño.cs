@@ -6,30 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class TablaDueño : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Clientes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Nombre = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    Apellido = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Contrasenia = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    NombreUser = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Clientes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Dueño",
+                name: "Tabla Clientes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -42,7 +25,24 @@ namespace Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Dueño", x => x.Id);
+                    table.PrimaryKey("PK_Tabla Clientes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tabla Dueños",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Nombre = table.Column<string>(type: "TEXT", nullable: false),
+                    Apellido = table.Column<string>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false),
+                    Contrasenia = table.Column<string>(type: "TEXT", nullable: false),
+                    NombreUser = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tabla Dueños", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -59,11 +59,10 @@ namespace Infrastructure.Data.Migrations
                 {
                     table.PrimaryKey("PK_Bicicletas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Bicicletas_Clientes_ClienteId",
+                        name: "FK_Bicicletas_Tabla Clientes_ClienteId",
                         column: x => x.ClienteId,
-                        principalTable: "Clientes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalTable: "Tabla Clientes",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -80,9 +79,9 @@ namespace Infrastructure.Data.Migrations
                 {
                     table.PrimaryKey("PK_Talleres", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Talleres_Dueño_DueñoId",
+                        name: "FK_Talleres_Tabla Dueños_DueñoId",
                         column: x => x.DueñoId,
-                        principalTable: "Dueño",
+                        principalTable: "Tabla Dueños",
                         principalColumn: "Id");
                 });
 
@@ -146,10 +145,10 @@ namespace Infrastructure.Data.Migrations
                 name: "Talleres");
 
             migrationBuilder.DropTable(
-                name: "Clientes");
+                name: "Tabla Clientes");
 
             migrationBuilder.DropTable(
-                name: "Dueño");
+                name: "Tabla Dueños");
         }
     }
 }
