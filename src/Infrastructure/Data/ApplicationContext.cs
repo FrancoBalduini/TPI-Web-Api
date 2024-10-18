@@ -23,6 +23,7 @@ namespace Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
             modelBuilder.Entity<Cliente>().ToTable("Tabla Clientes");
             modelBuilder.Entity<Dueño>().ToTable("Tabla Dueños");
 
