@@ -15,7 +15,7 @@ namespace Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public DateTime FechaIngreso { get; set; } = DateTime.Now;
-        public DateTime FechaSalida { get; set; } = DateTime.Now.AddDays(3);
+        public DateTime FechaSalida { get; set; } = DateTime.Now;
         public EstadoMantenimiento estadoMantenimiento { get; set; } = EstadoMantenimiento.Pendiente;
         public Bicicleta Bicicleta { get; set; }
         public int? BicicletaId { get; set; }

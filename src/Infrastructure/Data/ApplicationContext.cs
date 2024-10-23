@@ -17,7 +17,7 @@ namespace Infrastructure.Data
         }
         public DbSet<Bicicleta> Bicicletas { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
-
+        public DbSet<Mantenimiento> Mantenimientos { get; set; }
         public DbSet<Taller> Talleres { get; set; }
         public DbSet<Dueño> Dueños { get; set; }
 
