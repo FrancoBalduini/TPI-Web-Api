@@ -34,18 +34,21 @@ builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<ITallerRepository, TallerRepository>();
 builder.Services.AddScoped<IBicicletaRepository, BicicletaRepository>();
 builder.Services.AddScoped<IDueñoRepository, DueñoRepository>();
+builder.Services.AddScoped<IMantenimientoRepository, MantenimientoRepository>();
 // Registra un repositorio base genérico para las entidades,
 // permitiendo que se realicen operaciones comunes de acceso a datos.
 builder.Services.AddScoped<IBaseRepository<Cliente>, BaseRepository<Cliente>>();
 builder.Services.AddScoped<IBaseRepository<Taller>, BaseRepository<Taller>>();
 builder.Services.AddScoped<IBaseRepository<Bicicleta>, BaseRepository<Bicicleta>>();
 builder.Services.AddScoped<IBaseRepository<Dueño>, BaseRepository<Dueño>>();
-
+builder.Services.AddScoped<IBaseRepository<Mantenimiento>, BaseRepository<Mantenimiento>>();
 // Service
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<ITallerService, TallerService>();
 builder.Services.AddScoped<IBicicletaService, BicicletaService>();
 builder.Services.AddScoped<IDueñoService, DueñoService>();
+builder.Services.AddScoped<IMantenimientoService, MantenimientoService>();  
+
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile)); //AutoMapper
 

@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Entities;
 
-namespace Domain.Enums
+namespace Domain.Interfaces
 {
-    public enum EstadoMantenimiento
+    public interface IMantenimientoRepository : IBaseRepository<Mantenimiento>
     {
-        Cancelado,
-        Pendiente,
-        Aceptado,
-        Finalizado
+
     }
 }

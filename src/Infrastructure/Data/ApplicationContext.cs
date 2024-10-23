@@ -48,6 +48,20 @@ namespace Infrastructure.Data
                  
             });
 
+            modelBuilder.Entity<Mantenimiento>(m =>
+            {
+                m.HasOne(m => m.Taller)
+                .WithMany(t => t.Mantenimientos)
+                .HasForeignKey(m => m.TallerId);
+            });
+
+            modelBuilder.Entity<Mantenimiento>(m =>
+            {
+                m.HasOne(m => m.Bicicleta)
+                .WithMany(b => b.Mantenimientos)
+                .HasForeignKey(m => m.BicicletaId);
+            });
+
             modelBuilder.Entity<Dueño>(e =>
             {
                 e.HasMany(d => d.Talleres)
@@ -61,6 +75,7 @@ namespace Infrastructure.Data
                 .WithOne(t => t.Cliente)
                 .HasForeignKey(t => t.ClienteId);
             });
+
 
             base.OnModelCreating(modelBuilder);
 
