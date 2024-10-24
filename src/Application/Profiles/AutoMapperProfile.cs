@@ -40,6 +40,8 @@ namespace Application.Profiles
             CreateMap<BicicletaUpdateRequest, Bicicleta>();
             CreateMap<Bicicleta, BicicletaDTO>()
                 .ForMember(dest => dest.ClienteNombre, opt => opt.MapFrom(bici => bici.Cliente != null ? $"{bici.Cliente.Nombre} {bici.Cliente.Apellido}" : string.Empty)); ;
+
+           
         }
     }
 }

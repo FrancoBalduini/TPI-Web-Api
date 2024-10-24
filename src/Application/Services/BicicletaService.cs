@@ -10,6 +10,8 @@ using AutoMapper;
 using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Interfaces;
+using System.Security.Claims;
+using Domain.Enums;
 
 namespace Application.Services
 {
@@ -57,17 +59,21 @@ namespace Application.Services
                 return _mapper.Map<List<BicicletaDTO>>(bicicletas);
             }
 
-            public BicicletaDTO GetById(int id, int clienteId)
+            public BicicletaDTO GetById(int id, int idLogged, string rolLogged)
             {
-                var cliente = GetCliente(clienteId);
-                
                 var bicicleta = _bicicletaRepository.GetById(id) ?? throw new NotFoundException($"No se encontró el ID ingresado: {id}");
-            if (bicicleta.Cliente == cliente)
-                return _mapper.Map<BicicletaDTO>(bicicleta);
-            else
-                throw new NotFoundException($"Esa bicicleta no le pertenece");
+                if (rolLogged == "SysAdmin")
+                {
+                    return _mapper.Map<BicicletaDTO>(bicicleta);
+                }
+                var cliente = GetCliente(idLogged);
+            
+                if (bicicleta.Cliente == cliente)
+                    return _mapper.Map<BicicletaDTO>(bicicleta);
+                else
+                    throw new NotFoundException($"Esa bicicleta no le pertenece");
             }
-
+        
             public void Update(int id, BicicletaUpdateRequest bicicletaUpdateRequest)
             {
                 var bicicleta = _bicicletaRepository.GetById(id) ?? throw new NotFoundException($"No se encontró el ID ingresado: {id}");
@@ -75,7 +81,7 @@ namespace Application.Services
                 _bicicletaRepository.Update(bicicleta);
             }
 
-            public List<Bicicleta> GetBicicletasConClientes(int clienteId)
+            public List<Bicicleta> GetBicicletasConCliente(int clienteId)
             {
                 return _bicicletaRepository.GetBicicletasConClientes(clienteId);
             }

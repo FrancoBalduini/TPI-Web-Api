@@ -31,11 +31,12 @@ namespace Web.Controller
 
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Cliente")]
+        [Authorize(Roles =  "SysAdmin, Cliente")]
         public ActionResult<BicicletaDTO> GetById([FromRoute] int id)
         {
             try
             {
+                var rolCliente = User.FindFirst(ClaimTypes.Role)?.Value;
                 var clienteIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (clienteIdClaim == null)
                 {
@@ -44,7 +45,7 @@ namespace Web.Controller
 
                 var clienteId = int.Parse(clienteIdClaim);
 
-                return _bicicletaService.GetById(id, clienteId);
+                return _bicicletaService.GetById(id, clienteId, rolCliente);
             }
             catch (NotFoundException ex)
             {
@@ -52,19 +53,19 @@ namespace Web.Controller
             }
         }
 
-        [HttpGet("{id}")]
-        [Authorize(Roles = "SysAdmin")]
-        public ActionResult<BicicletaDTO> GetByIdAdmin([FromRoute] int id)
-        {
-            try
-            {
-                return _bicicletaService.GetById(id); //aaaaaaaarreglar
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
+        //[HttpGet("{id}")]
+        //[Authorize(Roles = "SysAdmin")]
+        //public ActionResult<BicicletaDTO> GetByIdAdmin([FromRoute] int id)
+        //{
+        //    try
+        //    {
+        //        return _bicicletaService.GetById(id); //aaaaaaaarreglar
+        //    }
+        //    catch (NotFoundException ex)
+        //    {
+        //        return NotFound(ex.Message);
+        //    }
+        //}
 
 
         [HttpPost]
@@ -140,12 +141,20 @@ namespace Web.Controller
         }
 
 
-        [HttpGet("clientes/{clienteId}")]
+        [HttpGet]
         [Authorize(Roles = "Cliente")]
-        //cambiar nombre y agregar el de sysamdin
-        public ActionResult<List<Bicicleta>> GetBicicletasConClientes(int clienteId)
+        
+        public ActionResult<List<Bicicleta>> GetBicicletasClienteLogged()
         {
-            var bicicletasConClientes = _bicicletaService.GetBicicletasConClientes(clienteId);
+            var clienteIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (clienteIdClaim == null)
+            {
+                return Unauthorized("No se pudo encontrar el Id del cliente.");
+            }
+
+            var clienteId = int.Parse(clienteIdClaim);
+
+            var bicicletasConClientes = _bicicletaService.GetBicicletasConCliente(clienteId);
             return Ok(bicicletasConClientes);
         }
     }

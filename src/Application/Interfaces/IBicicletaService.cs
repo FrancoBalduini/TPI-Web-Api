@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Application.Models.Request;
 using Application.Models;
 using Domain.Entities;
+using Domain.Enums;
 
 namespace Application.Interfaces
 {
@@ -13,12 +14,12 @@ namespace Application.Interfaces
     {
         void Delete(int id);
         List<BicicletaDTO> GetAll();
-        BicicletaDTO GetById(int id, int clienteId);
+        BicicletaDTO GetById(int id, int clienteId,string rolCliente);
 
         void Update(int id, BicicletaUpdateRequest bicicletaUpdateRequest);
 
         BicicletaDTO Create(BicicletaCreateRequest bicicletaCreateRequest, int clienteIdToken);
 
-        List<Bicicleta> GetBicicletasConClientes(int clienteId);
+        List<Bicicleta> GetBicicletasConCliente(int clienteId);
     }
 }

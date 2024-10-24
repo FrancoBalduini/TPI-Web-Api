@@ -20,7 +20,6 @@ namespace Infrastructure.Data
         public List<Bicicleta> GetBicicletasConClientes(int clienteId)
         {
             return _context.Bicicletas
-                .Include(t => t.Cliente)
                 .Where(t => t.ClienteId == clienteId)
                 .ToList();
         }
