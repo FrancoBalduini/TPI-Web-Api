@@ -53,20 +53,6 @@ namespace Web.Controller
             }
         }
 
-        //[HttpGet("{id}")]
-        //[Authorize(Roles = "SysAdmin")]
-        //public ActionResult<BicicletaDTO> GetByIdAdmin([FromRoute] int id)
-        //{
-        //    try
-        //    {
-        //        return _bicicletaService.GetById(id); //aaaaaaaarreglar
-        //    }
-        //    catch (NotFoundException ex)
-        //    {
-        //        return NotFound(ex.Message);
-        //    }
-        //}
-
 
         [HttpPost]
         [Authorize(Roles = "Cliente")]
@@ -131,7 +117,15 @@ namespace Web.Controller
         {
             try
             {
-                _bicicletaService.Delete(id);
+                var rolCliente = User.FindFirst(ClaimTypes.Role)?.Value;
+                var clienteIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (clienteIdClaim == null)
+                {
+                    return Unauthorized("No se pudo encontrar el Id del cliente.");
+                }
+
+                var clienteId = int.Parse(clienteIdClaim);
+                _bicicletaService.Delete(id, clienteId, rolCliente);
                 return NoContent();
             }
             catch (NotFoundException ex)

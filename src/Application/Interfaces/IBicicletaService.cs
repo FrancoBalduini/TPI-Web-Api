@@ -12,7 +12,7 @@ namespace Application.Interfaces
 {
     public interface IBicicletaService
     {
-        void Delete(int id);
+        void Delete(int id, int idLogged, string rolLogged);
         List<BicicletaDTO> GetAll();
         BicicletaDTO GetById(int id, int clienteId,string rolCliente);
 

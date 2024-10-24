@@ -46,11 +46,23 @@ namespace Application.Services
             return _mapper.Map<BicicletaDTO>(bicicleta);
         }
 
-        public void Delete(int id)
+        public void Delete(int id, int idLogged, string rolLogged)
             {
-                var bicicleta = _bicicletaRepository.GetById(id) ?? throw new NotFoundException($"No se encontró el ID ingresado: {id}");
-                _bicicletaRepository.Delete(bicicleta);
+            var borrar = _bicicletaRepository.GetById(id) ?? throw new NotFoundException($"No se encontró el ID ingresado: {id}");
+            if (rolLogged == "SysAdmin")
+            {
+                _bicicletaRepository.Delete(borrar);
             }
+            else
+            {
+                var cliente = GetCliente(idLogged);
+                if (borrar.Cliente == cliente)
+                    _bicicletaRepository.Delete(borrar);
+                else
+                    throw new NotFoundException($"Esa bicicleta no le pertenece");
+            }
+            
+        }
 
             public List<BicicletaDTO> GetAll()
             {
