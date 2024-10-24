@@ -16,7 +16,7 @@ namespace Application.Interfaces
         List<BicicletaDTO> GetAll();
         BicicletaDTO GetById(int id, int clienteId,string rolCliente);
 
-        void Update(int id, BicicletaUpdateRequest bicicletaUpdateRequest);
+        void Update(int id, int clienteId,string rolCliente, BicicletaUpdateRequest bicicletaUpdateRequest);
 
         BicicletaDTO Create(BicicletaCreateRequest bicicletaCreateRequest, int clienteIdToken);
 

@@ -86,11 +86,24 @@ namespace Application.Services
                     throw new NotFoundException($"Esa bicicleta no le pertenece");
             }
         
-            public void Update(int id, BicicletaUpdateRequest bicicletaUpdateRequest)
+            public void Update(int id, int clienteId, string rolCliente, BicicletaUpdateRequest bicicletaUpdateRequest)
             {
                 var bicicleta = _bicicletaRepository.GetById(id) ?? throw new NotFoundException($"No se encontró el ID ingresado: {id}");
                 _mapper.Map(bicicletaUpdateRequest, bicicleta);
-                _bicicletaRepository.Update(bicicleta);
+                if (rolCliente == "SysAdmin")
+                {
+                    _bicicletaRepository.Update(bicicleta);
+                }
+                else 
+                {
+                    var cliente = GetCliente(clienteId);
+                
+                    if (bicicleta.Cliente == cliente)
+                        _bicicletaRepository.Update(bicicleta);
+                    else
+                        throw new NotFoundException($"Esa bicicleta no le pertenece");
+                }
+
             }
 
             public List<Bicicleta> GetBicicletasConCliente(int clienteId)

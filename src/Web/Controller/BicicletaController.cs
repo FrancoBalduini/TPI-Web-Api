@@ -95,12 +95,20 @@ namespace Web.Controller
 
         [HttpPut("{id}")]
         [Authorize(Roles = "SysAdmin, Cliente")]
-        //q updatee las suyas
         public IActionResult Update([FromRoute] int id, [FromBody] BicicletaUpdateRequest bicicletaUpdateRequest)
         {
             try
             {
-                _bicicletaService.Update(id, bicicletaUpdateRequest);
+                var rolCliente = User.FindFirst(ClaimTypes.Role)?.Value;
+                var clienteIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (clienteIdClaim == null)
+                {
+                    return Unauthorized("No se pudo encontrar el Id del cliente.");
+                }
+
+                var clienteId = int.Parse(clienteIdClaim);
+
+                _bicicletaService.Update(id, clienteId, rolCliente, bicicletaUpdateRequest);
                 return NoContent();
             }
             catch (NotFoundException ex)
@@ -112,7 +120,6 @@ namespace Web.Controller
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "SysAdmin, Cliente")]
-        //q solo borre las suyas
         public IActionResult Delete([FromRoute] int id)
         {
             try
