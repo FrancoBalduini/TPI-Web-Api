@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Domain.Entities;
 
-namespace Domain.Interfaces
+namespace Domain.Enums
 {
-    public interface IDuenoRepository : IBaseRepository<Dueno>
+    public enum UserRole
     {
-
+        Cliente,
+        Dueno,
+        SysAdmin
     }
 }

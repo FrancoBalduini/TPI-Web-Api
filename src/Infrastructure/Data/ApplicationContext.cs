@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
@@ -19,22 +20,30 @@ namespace Infrastructure.Data
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Mantenimiento> Mantenimientos { get; set; }
         public DbSet<Taller> Talleres { get; set; }
-        public DbSet<Dueño> Dueños { get; set; }
+        public DbSet<Dueno> Duenos { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
-            modelBuilder.Entity<Cliente>().ToTable("Tabla Clientes");
-            modelBuilder.Entity<Dueño>().ToTable("Tabla Dueños");
+
+            //modelBuilder.Entity<Cliente>().ToTable("Tabla Clientes");
+            //modelBuilder.Entity<Dueno>().ToTable("Tabla Duenos");
+
+            modelBuilder.Entity<Usuario>()
+                .ToTable("Usuarios")  // Mapea toda la jerarquía a la misma tabla "Usuarios"
+                .HasDiscriminator<UserRole>("UserRole")
+                .HasValue<Cliente>(UserRole.Cliente)
+                .HasValue<Dueno>(UserRole.Dueno)
+                .HasValue<SysAdmin>(UserRole.SysAdmin);
 
             modelBuilder.Entity<Taller>(e =>
             {
-                // Relacion entre taller - dueño 
-                // un taller posee un dueño, e.HasOne(t => t.Dueño) e es entidad y t taller
-                // un dueño puede tener varios talleres, .WithMany(d => d.Talleres) d es dueño
-                e.HasOne(t => t.Dueño)
+                // Relacion entre taller - Dueno 
+                // un taller posee un Dueno, e.HasOne(t => t.Dueno) e es entidad y t taller
+                // un Dueno puede tener varios talleres, .WithMany(d => d.Talleres) d es Dueno
+                e.HasOne(t => t.Dueno)
                  .WithMany(d => d.Talleres)
-                 .HasForeignKey(t => t.DueñoId); 
+                 .HasForeignKey(t => t.DuenoId); 
             });
 
             modelBuilder.Entity<Bicicleta>(e =>
@@ -62,11 +71,11 @@ namespace Infrastructure.Data
                 .HasForeignKey(m => m.BicicletaId);
             });
 
-            modelBuilder.Entity<Dueño>(e =>
+            modelBuilder.Entity<Dueno>(e =>
             {
                 e.HasMany(d => d.Talleres)
-                .WithOne(t => t.Dueño)
-                .HasForeignKey(t => t.DueñoId);
+                .WithOne(t => t.Dueno)
+                .HasForeignKey(t => t.DuenoId);
             });
 
             modelBuilder.Entity<Cliente>(e =>

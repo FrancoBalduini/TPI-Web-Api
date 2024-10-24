@@ -20,7 +20,7 @@ namespace Application.Models
             dto.Id = bicicleta.Id;
             dto.Marca = bicicleta.Marca;
             dto.Modelo = bicicleta.Modelo;
-            // Si el taller tiene un dueño, devuelve su nombre completo; si no tiene dueño, devuelve una cadena vacía.
+            // Si el taller tiene un Dueno, devuelve su nombre completo; si no tiene Dueno, devuelve una cadena vacía.
             dto.ClienteNombre = bicicleta.Cliente != null ? $"{bicicleta.Cliente.Nombre} {bicicleta.Cliente.Apellido}" : string.Empty;
 
             return dto;

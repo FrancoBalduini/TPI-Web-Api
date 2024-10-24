@@ -54,9 +54,9 @@ namespace Application.Services
             _tallerRepository.Update(taller);
         }
 
-        public List<Taller> GetTallerConDueños(int dueñoId)
+        public List<Taller> GetTallerConDuenos(int DuenoId)
         {
-            return _tallerRepository.GetTallerConDueños(dueñoId);
+            return _tallerRepository.GetTallerConDuenos(DuenoId);
         }
     }
 }

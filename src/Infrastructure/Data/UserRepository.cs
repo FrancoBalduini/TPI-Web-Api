@@ -8,12 +8,18 @@ using Domain.Interfaces;
 
 namespace Infrastructure.Data
 {
-    public class DuenoRepository : BaseRepository<Dueno>, IDuenoRepository
+    public class UserRepository : BaseRepository<Usuario> ,IUserRepository 
     {
         private readonly ApplicationContext _context;
-        public DuenoRepository(ApplicationContext context) : base(context)
+
+        public UserRepository(ApplicationContext context) : base(context) 
         {
             _context = context;
+        }  
+
+        public Usuario? GetByUserName(string userName) 
+        {
+            return _context.Usuarios.FirstOrDefault(x => x.NombreUser == userName);
         }
     }
 }

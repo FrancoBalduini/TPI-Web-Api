@@ -20,8 +20,8 @@ namespace Domain.Entities
         [Required]
 
         public string Direccion { get; set; } = string.Empty;
-        public Dueño Dueño { get; set; } // Propiedad para la navegación para poder acceder a la entidad Dueño desde la instancia de Taller
-        public int? DueñoId { get; set; }
+        public Dueno Dueno { get; set; } // Propiedad para la navegación para poder acceder a la entidad Dueno desde la instancia de Taller
+        public int? DuenoId { get; set; }
         public ICollection<Mantenimiento> Mantenimientos { get; set; } = new List<Mantenimiento>();
 
     }

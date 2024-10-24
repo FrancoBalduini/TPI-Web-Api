@@ -88,11 +88,11 @@ namespace Web.Controller
         }
 
         
-        [HttpGet("dueños/{dueñoId}")]
-        public ActionResult<List<Taller>> GetTalleresConDueños(int dueñoId)
+        [HttpGet("Duenos/{DuenoId}")]
+        public ActionResult<List<Taller>> GetTalleresConDuenos(int DuenoId)
         {
-            var talleresConDueños = _tallerService.GetTallerConDueños(dueñoId);
-            return Ok(talleresConDueños);
+            var talleresConDuenos = _tallerService.GetTallerConDuenos(DuenoId);
+            return Ok(talleresConDuenos);
         }
     }
 }

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20241023175802_TablaMantenimiento")]
-    partial class TablaMantenimiento
+    [Migration("20241024043001_TablaUserDeluxeEdition")]
+    partial class TablaUserDeluxeEdition
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,68 +44,6 @@ namespace Infrastructure.Data.Migrations
                     b.ToTable("Bicicletas");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Cliente", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Apellido")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Contrasenia")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("NombreUser")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tabla Clientes", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Entities.Dueño", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Apellido")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Contrasenia")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("NombreUser")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tabla Dueños", (string)null);
-                });
-
             modelBuilder.Entity("Domain.Entities.Mantenimiento", b =>
                 {
                     b.Property<int>("Id")
@@ -133,7 +71,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("TallerId");
 
-                    b.ToTable("Mantenimiento");
+                    b.ToTable("Mantenimientos");
                 });
 
             modelBuilder.Entity("Domain.Entities.Taller", b =>
@@ -146,7 +84,7 @@ namespace Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("DueñoId")
+                    b.Property<int?>("DuenoId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Nombre")
@@ -155,9 +93,68 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DueñoId");
+                    b.HasIndex("DuenoId");
 
                     b.ToTable("Talleres");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Usuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Apellido")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Contrasenia")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NombreUser")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserRole")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Usuarios", (string)null);
+
+                    b.HasDiscriminator<int>("UserRole");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("Domain.Entities.Cliente", b =>
+                {
+                    b.HasBaseType("Domain.Entities.Usuario");
+
+                    b.HasDiscriminator().HasValue(0);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Dueno", b =>
+                {
+                    b.HasBaseType("Domain.Entities.Usuario");
+
+                    b.HasDiscriminator().HasValue(1);
+                });
+
+            modelBuilder.Entity("Domain.Entities.SysAdmin", b =>
+                {
+                    b.HasBaseType("Domain.Entities.Usuario");
+
+                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("Domain.Entities.Bicicleta", b =>
@@ -186,14 +183,19 @@ namespace Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Domain.Entities.Taller", b =>
                 {
-                    b.HasOne("Domain.Entities.Dueño", "Dueño")
+                    b.HasOne("Domain.Entities.Dueno", "Dueno")
                         .WithMany("Talleres")
-                        .HasForeignKey("DueñoId");
+                        .HasForeignKey("DuenoId");
 
-                    b.Navigation("Dueño");
+                    b.Navigation("Dueno");
                 });
 
             modelBuilder.Entity("Domain.Entities.Bicicleta", b =>
+                {
+                    b.Navigation("Mantenimientos");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Taller", b =>
                 {
                     b.Navigation("Mantenimientos");
                 });
@@ -203,14 +205,9 @@ namespace Infrastructure.Data.Migrations
                     b.Navigation("Bicicletas");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Dueño", b =>
+            modelBuilder.Entity("Domain.Entities.Dueno", b =>
                 {
                     b.Navigation("Talleres");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Taller", b =>
-                {
-                    b.Navigation("Mantenimientos");
                 });
 #pragma warning restore 612, 618
         }

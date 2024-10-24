@@ -13,47 +13,47 @@ using Domain.Exceptions;
 
 namespace Application.Services
 {
-    public class DueñoService : IDueñoService
+    public class DuenoService : IDuenoService
     {
-        private readonly IDueñoRepository _dueñoRepository;
+        private readonly IDuenoRepository _DuenoRepository;
         private readonly IMapper _mapper;
 
-        public DueñoService(IDueñoRepository dueñoRepository, IMapper mapper)
+        public DuenoService(IDuenoRepository DuenoRepository, IMapper mapper)
         {
-            _dueñoRepository = dueñoRepository;
+            _DuenoRepository = DuenoRepository;
             _mapper = mapper;
         }
 
-        public DueñoDTO Create(DueñoCreateRequest dueñoCreateRequest)
+        public DuenoDTO Create(DuenoCreateRequest DuenoCreateRequest)
         {
-            var dueño = _mapper.Map<Dueño>(dueñoCreateRequest);
-            _dueñoRepository.Add(dueño);
-            return _mapper.Map<DueñoDTO>(dueño);
+            var Dueno = _mapper.Map<Dueno>(DuenoCreateRequest);
+            _DuenoRepository.Add(Dueno);
+            return _mapper.Map<DuenoDTO>(Dueno);
         }
 
-        public List<DueñoDTO> GetAll()
+        public List<DuenoDTO> GetAll()
         {
-            var dueños = _dueñoRepository.GetAll();
-            return _mapper.Map<List<DueñoDTO>>(dueños);
+            var Duenos = _DuenoRepository.GetAll();
+            return _mapper.Map<List<DuenoDTO>>(Duenos);
         }
 
-        public DueñoDTO GetById(int id)
+        public DuenoDTO GetById(int id)
         {
-            var dueño = _dueñoRepository.GetById(id) ?? throw new NotFoundException($"No se encontró el ID ingresado: {id}");
-            return _mapper.Map<DueñoDTO>(dueño);
+            var Dueno = _DuenoRepository.GetById(id) ?? throw new NotFoundException($"No se encontró el ID ingresado: {id}");
+            return _mapper.Map<DuenoDTO>(Dueno);
         }
 
         public void Delete(int id)
         {
-            var dueñoId = _dueñoRepository.GetById(id) ?? throw new NotFoundException($"No se encontró el ID ingresado: {id}");
-            _dueñoRepository.Delete(dueñoId);
+            var DuenoId = _DuenoRepository.GetById(id) ?? throw new NotFoundException($"No se encontró el ID ingresado: {id}");
+            _DuenoRepository.Delete(DuenoId);
         }
 
-        public void Update(int id, DueñoUpdateRequest dueñoUpdateRequest)
+        public void Update(int id, DuenoUpdateRequest DuenoUpdateRequest)
         {
-            var dueño = _dueñoRepository.GetById(id) ?? throw new NotFoundException($"No se encontró el ID ingresado: {id}");
-            _mapper.Map(dueñoUpdateRequest, dueño);
-            _dueñoRepository.Update(dueño);
+            var Dueno = _DuenoRepository.GetById(id) ?? throw new NotFoundException($"No se encontró el ID ingresado: {id}");
+            _mapper.Map(DuenoUpdateRequest, Dueno);
+            _DuenoRepository.Update(Dueno);
 
         }
     }

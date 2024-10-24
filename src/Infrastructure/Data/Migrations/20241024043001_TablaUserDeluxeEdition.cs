@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class TablaUserDeluxeEdition : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Tabla Clientes",
+                name: "Usuarios",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -21,28 +21,12 @@ namespace Infrastructure.Data.Migrations
                     Apellido = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     Contrasenia = table.Column<string>(type: "TEXT", nullable: false),
-                    NombreUser = table.Column<string>(type: "TEXT", nullable: false)
+                    NombreUser = table.Column<string>(type: "TEXT", nullable: false),
+                    UserRole = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tabla Clientes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Tabla Dueños",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Nombre = table.Column<string>(type: "TEXT", nullable: false),
-                    Apellido = table.Column<string>(type: "TEXT", nullable: false),
-                    Email = table.Column<string>(type: "TEXT", nullable: false),
-                    Contrasenia = table.Column<string>(type: "TEXT", nullable: false),
-                    NombreUser = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tabla Dueños", x => x.Id);
+                    table.PrimaryKey("PK_Usuarios", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -59,9 +43,9 @@ namespace Infrastructure.Data.Migrations
                 {
                     table.PrimaryKey("PK_Bicicletas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Bicicletas_Tabla Clientes_ClienteId",
+                        name: "FK_Bicicletas_Usuarios_ClienteId",
                         column: x => x.ClienteId,
-                        principalTable: "Tabla Clientes",
+                        principalTable: "Usuarios",
                         principalColumn: "Id");
                 });
 
@@ -73,39 +57,40 @@ namespace Infrastructure.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Nombre = table.Column<string>(type: "TEXT", nullable: false),
                     Direccion = table.Column<string>(type: "TEXT", nullable: false),
-                    DueñoId = table.Column<int>(type: "INTEGER", nullable: true)
+                    DuenoId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Talleres", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Talleres_Tabla Dueños_DueñoId",
-                        column: x => x.DueñoId,
-                        principalTable: "Tabla Dueños",
+                        name: "FK_Talleres_Usuarios_DuenoId",
+                        column: x => x.DuenoId,
+                        principalTable: "Usuarios",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Mantenimiento",
+                name: "Mantenimientos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     FechaIngreso = table.Column<DateTime>(type: "TEXT", nullable: false),
                     FechaSalida = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    estadoMantenimiento = table.Column<int>(type: "INTEGER", nullable: false),
                     BicicletaId = table.Column<int>(type: "INTEGER", nullable: true),
                     TallerId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Mantenimiento", x => x.Id);
+                    table.PrimaryKey("PK_Mantenimientos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Mantenimiento_Bicicletas_BicicletaId",
+                        name: "FK_Mantenimientos_Bicicletas_BicicletaId",
                         column: x => x.BicicletaId,
                         principalTable: "Bicicletas",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Mantenimiento_Talleres_TallerId",
+                        name: "FK_Mantenimientos_Talleres_TallerId",
                         column: x => x.TallerId,
                         principalTable: "Talleres",
                         principalColumn: "Id");
@@ -117,26 +102,26 @@ namespace Infrastructure.Data.Migrations
                 column: "ClienteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Mantenimiento_BicicletaId",
-                table: "Mantenimiento",
+                name: "IX_Mantenimientos_BicicletaId",
+                table: "Mantenimientos",
                 column: "BicicletaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Mantenimiento_TallerId",
-                table: "Mantenimiento",
+                name: "IX_Mantenimientos_TallerId",
+                table: "Mantenimientos",
                 column: "TallerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Talleres_DueñoId",
+                name: "IX_Talleres_DuenoId",
                 table: "Talleres",
-                column: "DueñoId");
+                column: "DuenoId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Mantenimiento");
+                name: "Mantenimientos");
 
             migrationBuilder.DropTable(
                 name: "Bicicletas");
@@ -145,10 +130,7 @@ namespace Infrastructure.Data.Migrations
                 name: "Talleres");
 
             migrationBuilder.DropTable(
-                name: "Tabla Clientes");
-
-            migrationBuilder.DropTable(
-                name: "Tabla Dueños");
+                name: "Usuarios");
         }
     }
 }

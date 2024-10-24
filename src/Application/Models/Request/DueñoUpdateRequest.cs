@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.Models.Request
 {
-    public class DueñoUpdateRequest
+    public class DuenoUpdateRequest
     {
         private int id { get; set; } 
         public string Nombre { get; set; } = string.Empty;

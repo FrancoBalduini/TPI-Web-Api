@@ -7,7 +7,7 @@ using Domain.Entities;
 
 namespace Application.Models
 {
-    public class DueñoDTO
+    public class DuenoDTO
     {
         public int Id { get; set; }
         public string Nombre { get; set; } = string.Empty;
@@ -15,14 +15,14 @@ namespace Application.Models
         public string Email { get; set; } = string.Empty;
         public string NombreUser { get; set; } = string.Empty;
 
-        public static DueñoDTO Create(Dueño dueño)
+        public static DuenoDTO Create(Dueno Dueno)
         {
-            var dto = new DueñoDTO();
-            dto.Id = dueño.Id;
-            dto.Nombre = dueño.Nombre;
-            dto.Apellido = dueño.Apellido;
-            dto.Email = dueño.Email;
-            dto.NombreUser = dueño.NombreUser;
+            var dto = new DuenoDTO();
+            dto.Id = Dueno.Id;
+            dto.Nombre = Dueno.Nombre;
+            dto.Apellido = Dueno.Apellido;
+            dto.Email = Dueno.Email;
+            dto.NombreUser = Dueno.NombreUser;
 
             return dto;
         }

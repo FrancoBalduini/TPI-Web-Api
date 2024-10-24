@@ -19,17 +19,17 @@ namespace Application.Profiles
             CreateMap<TallerCreateRequest, Taller>();
             CreateMap<TallerUpdateRequest, Taller>();
             CreateMap<Taller, TallerDTO>()
-                // Mapea la propiedad 'DueñoNombre' en el DTO, concatenando el nombre y apellido del dueño
-                // si existe, o asignando una cadena vacía si no hay dueño asociado.
-                .ForMember(dest => dest.DueñoNombre, opt => opt.MapFrom(src => src.Dueño != null ? $"{src.Dueño.Nombre} {src.Dueño.Apellido}" : string.Empty));
+                // Mapea la propiedad 'DuenoNombre' en el DTO, concatenando el nombre y apellido del Dueno
+                // si existe, o asignando una cadena vacía si no hay Dueno asociado.
+                .ForMember(dest => dest.DuenoNombre, opt => opt.MapFrom(src => src.Dueno != null ? $"{src.Dueno.Nombre} {src.Dueno.Apellido}" : string.Empty));
             
             CreateMap<ClienteCreateRequest, Cliente>();
             CreateMap<ClienteUpdateRequest, Cliente>();
             CreateMap<Cliente, ClienteDTO>();
 
-            CreateMap<DueñoCreateRequest, Dueño>();
-            CreateMap<DueñoUpdateRequest, Dueño>();
-            CreateMap<Dueño, DueñoDTO>();
+            CreateMap<DuenoCreateRequest, Dueno>();
+            CreateMap<DuenoUpdateRequest, Dueno>();
+            CreateMap<Dueno, DuenoDTO>();
 
             CreateMap<Mantenimiento, MantenimientoDTO>();
             CreateMap<MantenimientoCreateRequest, Mantenimiento>();

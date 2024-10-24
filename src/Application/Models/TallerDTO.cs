@@ -16,7 +16,7 @@ namespace Application.Models
 
         public string Direccion { get; set; } = string.Empty;
 
-        public string DueñoNombre { get; set; } = string.Empty;
+        public string DuenoNombre { get; set; } = string.Empty;
 
         public static TallerDTO Create(Taller taller)
 
@@ -25,8 +25,8 @@ namespace Application.Models
             dto.Id = taller.Id;
             dto.Nombre = taller.Nombre;
             dto.Direccion = taller.Direccion;
-            // Si el taller tiene un dueño, devuelve su nombre completo; si no tiene dueño, devuelve una cadena vacía.
-            dto.DueñoNombre = taller.Dueño != null ? $"{taller.Dueño.Nombre} {taller.Dueño.Apellido}" : string.Empty;
+            // Si el taller tiene un Dueno, devuelve su nombre completo; si no tiene Dueno, devuelve una cadena vacía.
+            dto.DuenoNombre = taller.Dueno != null ? $"{taller.Dueno.Nombre} {taller.Dueno.Apellido}" : string.Empty;
 
             return dto;
         }

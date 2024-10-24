@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Dueno : Usuario
+    public class SysAdmin : Usuario
     {
-        public ICollection<Taller> Talleres { get; set; } = new List<Taller>();
+
     }
 }

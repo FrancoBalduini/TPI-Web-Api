@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Enums;
 
 namespace Domain.Entities
 {
@@ -31,6 +32,7 @@ namespace Domain.Entities
         [Required]
         public string NombreUser { get; set; } = string.Empty;
 
+        public UserRole UserRole { get; set; }
 
     }
 }

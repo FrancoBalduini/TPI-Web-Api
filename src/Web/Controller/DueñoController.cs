@@ -9,26 +9,26 @@ namespace Web.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DueñoController : ControllerBase
+    public class DuenoController : ControllerBase
     {
-        private readonly IDueñoService _dueñoService;
-        public DueñoController(IDueñoService dueñoService)
+        private readonly IDuenoService _DuenoService;
+        public DuenoController(IDuenoService DuenoService)
         {
-            _dueñoService = dueñoService;
+            _DuenoService = DuenoService;
         }
 
         [HttpGet]
-        public ActionResult<List<DueñoDTO>> GetAll()
+        public ActionResult<List<DuenoDTO>> GetAll()
         {
-            return _dueñoService.GetAll();
+            return _DuenoService.GetAll();
         }
 
         [HttpGet("{id}")]
-        public ActionResult<DueñoDTO> GetById(int id)
+        public ActionResult<DuenoDTO> GetById(int id)
         {
             try
             {
-                return _dueñoService.GetById(id);
+                return _DuenoService.GetById(id);
             }
             catch (NotFoundException ex)
             {
@@ -37,12 +37,12 @@ namespace Web.Controller
         }
 
         [HttpPost]
-        public ActionResult<DueñoDTO> Create([FromBody] DueñoCreateRequest dueñoCreateRequest)
+        public ActionResult<DuenoDTO> Create([FromBody] DuenoCreateRequest DuenoCreateRequest)
         {
             try
             {
-                var nuevoDueño = _dueñoService.Create(dueñoCreateRequest);
-                return CreatedAtAction(nameof(GetById), new { id = nuevoDueño.Id }, nuevoDueño);
+                var nuevoDueno = _DuenoService.Create(DuenoCreateRequest);
+                return CreatedAtAction(nameof(GetById), new { id = nuevoDueno.Id }, nuevoDueno);
             }
             catch (NotFoundException ex)
             {
@@ -51,11 +51,11 @@ namespace Web.Controller
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] DueñoUpdateRequest dueñoUpdateRequest)
+        public IActionResult Update([FromRoute] int id, [FromBody] DuenoUpdateRequest DuenoUpdateRequest)
         {
             try
             {
-                _dueñoService.Update(id, dueñoUpdateRequest);
+                _DuenoService.Update(id, DuenoUpdateRequest);
                 return NoContent();
             }
             catch (NotFoundException ex)
@@ -69,7 +69,7 @@ namespace Web.Controller
         {
             try
             {
-                _dueñoService.Delete(id);
+                _DuenoService.Delete(id);
                 return NoContent();
             }
             catch (NotFoundException ex)

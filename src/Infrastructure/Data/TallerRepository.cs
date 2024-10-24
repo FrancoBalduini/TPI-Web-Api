@@ -18,12 +18,12 @@ namespace Infrastructure.Data
             _context = context; 
         }
 
-        // Metodo especifico de taller para traer la lista de talleres con sus respectivos Dueños
-        public List<Taller> GetTallerConDueños(int dueñoId)
+        // Metodo especifico de taller para traer la lista de talleres con sus respectivos Duenos
+        public List<Taller> GetTallerConDuenos(int DuenoId)
         {
             return _context.Talleres
-                .Include(t => t.Dueño)
-                .Where(t => t.DueñoId == dueñoId)
+                .Include(t => t.Dueno)
+                .Where(t => t.DuenoId == DuenoId)
                 .ToList();
         }
 

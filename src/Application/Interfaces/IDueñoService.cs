@@ -9,15 +9,15 @@ using Domain.Entities;
 
 namespace Application.Interfaces
 {
-    public interface IDueñoService
+    public interface IDuenoService
     {
         void Delete(int id);
-        List<DueñoDTO> GetAll();
-        DueñoDTO GetById(int id);
+        List<DuenoDTO> GetAll();
+        DuenoDTO GetById(int id);
 
-        void Update(int id, DueñoUpdateRequest dueñoUpdateRequest);
+        void Update(int id, DuenoUpdateRequest DuenoUpdateRequest);
 
-        DueñoDTO Create(DueñoCreateRequest dueñoCreateRequest);
+        DuenoDTO Create(DuenoCreateRequest DuenoCreateRequest);
 
         
     }
