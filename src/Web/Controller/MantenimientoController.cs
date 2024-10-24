@@ -4,6 +4,7 @@ using Application.Models.Request;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,8 @@ namespace Web.Controller
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "SysAdmin, Cliente")]
+        // rol
         public ActionResult<MantenimientoDTO> GetById([FromRoute] int id) 
         {
             try
@@ -36,12 +39,14 @@ namespace Web.Controller
         }
 
         [HttpGet]
+        [Authorize(Roles = "SysAdmin")]
         public ActionResult<List<MantenimientoDTO>> GetAll()
         {
             return _service.GetAll();
         }
 
         [HttpPost]
+        [Authorize(Roles = "SysAdmin, Cliente")]
         public ActionResult<MantenimientoDTO> Create([FromBody]MantenimientoCreateRequest request)
         {
             try
@@ -56,6 +61,8 @@ namespace Web.Controller
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "SysAdmin, Dueno")]
+        // los personales (hacer endpoint de cliente de cancelar)
         public IActionResult Update([FromRoute] int id, [FromBody] MantenimientoUpdateRequest request)
         {
             try
@@ -70,6 +77,7 @@ namespace Web.Controller
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "SysAdmin")]
         public IActionResult Delete([FromRoute] int id)
         {
             try
@@ -82,5 +90,6 @@ namespace Web.Controller
                 return NotFound(ex.Message);
             }
         } 
+        //hacer endpoint de cancelar mantenimiento
     }
 }

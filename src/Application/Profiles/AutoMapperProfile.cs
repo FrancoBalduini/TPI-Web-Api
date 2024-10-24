@@ -21,7 +21,7 @@ namespace Application.Profiles
             CreateMap<Taller, TallerDTO>()
                 // Mapea la propiedad 'DuenoNombre' en el DTO, concatenando el nombre y apellido del Dueno
                 // si existe, o asignando una cadena vacía si no hay Dueno asociado.
-                .ForMember(dest => dest.DuenoNombre, opt => opt.MapFrom(src => src.Dueno != null ? $"{src.Dueno.Nombre} {src.Dueno.Apellido}" : string.Empty));
+                .ForMember(dest => dest.DuenoNombre, opt => opt.MapFrom(taller => taller.Dueno != null ? $"{taller.Dueno.Nombre} {taller.Dueno.Apellido}" : string.Empty));
             
             CreateMap<ClienteCreateRequest, Cliente>();
             CreateMap<ClienteUpdateRequest, Cliente>();
@@ -39,7 +39,7 @@ namespace Application.Profiles
             CreateMap<BicicletaCreateRequest, Bicicleta>();
             CreateMap<BicicletaUpdateRequest, Bicicleta>();
             CreateMap<Bicicleta, BicicletaDTO>()
-                .ForMember(dest => dest.ClienteNombre, opt => opt.MapFrom(src => src.Cliente != null ? $"{src.Cliente.Nombre} {src.Cliente.Apellido}" : string.Empty)); ;
+                .ForMember(dest => dest.ClienteNombre, opt => opt.MapFrom(bici => bici.Cliente != null ? $"{bici.Cliente.Nombre} {bici.Cliente.Apellido}" : string.Empty)); ;
         }
     }
 }

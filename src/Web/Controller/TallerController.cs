@@ -3,6 +3,7 @@ using Application.Models;
 using Application.Models.Request;
 using Domain.Entities;
 using Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -22,6 +23,7 @@ namespace Web.Controller
 
         
         [HttpGet]
+        [Authorize(Roles = "SysAdmin")]
         public ActionResult<List<TallerDTO>> GetAll()
         {
             return _tallerService.GetAll();
@@ -30,6 +32,7 @@ namespace Web.Controller
 
         
         [HttpGet("{id}")]
+        [Authorize(Roles = "SysAdmin, Dueno")]
         public ActionResult<TallerDTO> GetById([FromRoute] int id)
         {
             try
@@ -44,6 +47,7 @@ namespace Web.Controller
 
         
         [HttpPost]
+        [Authorize(Roles = "SysAdmin, Dueno")]
         public ActionResult<Taller> Create([FromBody] TallerCreateRequest tallerCreateRequest)
         {
             try
@@ -59,6 +63,8 @@ namespace Web.Controller
 
         
         [HttpPut("{id}")]
+        [Authorize(Roles = "SysAdmin, Dueno")]
+        //los personales
         public IActionResult Update([FromRoute] int id, [FromBody] TallerUpdateRequest tallerUpdateRequest)
         {
             try
@@ -74,6 +80,8 @@ namespace Web.Controller
 
         
         [HttpDelete("{id}")]
+        [Authorize(Roles = "SysAdmin, Dueno")]
+        //los personales
         public IActionResult Delete([FromRoute] int id)
         {
             try
@@ -86,9 +94,11 @@ namespace Web.Controller
                 return NotFound(ex.Message); 
             }
         }
-
+        
         
         [HttpGet("Duenos/{DuenoId}")]
+        [Authorize(Roles = "SysAdmin, Dueno")]
+        //cambiar nombre
         public ActionResult<List<Taller>> GetTalleresConDuenos(int DuenoId)
         {
             var talleresConDuenos = _tallerService.GetTallerConDuenos(DuenoId);

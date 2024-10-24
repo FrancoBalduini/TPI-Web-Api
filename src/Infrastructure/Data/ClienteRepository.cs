@@ -17,6 +17,10 @@ namespace Infrastructure.Data
             _context = context;
         }
 
+        public Cliente GetByIdToken(int idToken)
+        {
+            return _context.Clientes.FirstOrDefault(c => c.Id == idToken);
+        }
     }
 
 

@@ -9,6 +9,6 @@ namespace Domain.Interfaces
 {
     public interface IClienteRepository : IBaseRepository <Cliente>
     {
-
+        Cliente GetByIdToken(int idToken);
     }
 }

@@ -5,21 +5,24 @@ using Application.Services;
 using Domain.Entities;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Web.Controller
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[Action]")]
     public class BicicletaController : ControllerBase
     {
         private readonly IBicicletaService _bicicletaService;
-            public BicicletaController(IBicicletaService bicicletaService)
-            {
-                _bicicletaService = bicicletaService;
-            }
-        
+        public BicicletaController(IBicicletaService bicicletaService)
+        {
+            _bicicletaService = bicicletaService;
+        }
+
 
         [HttpGet]
+        [Authorize(Roles = "SysAdmin")]
         public ActionResult<List<BicicletaDTO>> GetAll()
         {
             return _bicicletaService.GetAll();
@@ -28,11 +31,34 @@ namespace Web.Controller
 
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Cliente")]
         public ActionResult<BicicletaDTO> GetById([FromRoute] int id)
         {
             try
             {
-                return _bicicletaService.GetById(id);
+                var clienteIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (clienteIdClaim == null)
+                {
+                    return Unauthorized("No se pudo encontrar el Id del cliente.");
+                }
+
+                var clienteId = int.Parse(clienteIdClaim);
+
+                return _bicicletaService.GetById(id, clienteId);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpGet("{id}")]
+        [Authorize(Roles = "SysAdmin")]
+        public ActionResult<BicicletaDTO> GetByIdAdmin([FromRoute] int id)
+        {
+            try
+            {
+                return _bicicletaService.GetById(id); //aaaaaaaarreglar
             }
             catch (NotFoundException ex)
             {
@@ -42,11 +68,21 @@ namespace Web.Controller
 
 
         [HttpPost]
+        [Authorize(Roles = "Cliente")]
         public ActionResult<Bicicleta> Create([FromBody] BicicletaCreateRequest bicicletaCreateRequest)
         {
             try
             {
-                var nuevoBicicleta = _bicicletaService.Create(bicicletaCreateRequest);
+
+                var clienteIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (clienteIdClaim == null)
+                {
+                    return Unauthorized("No se pudo encontrar el Id del cliente.");
+                }
+
+                var clienteId = int.Parse(clienteIdClaim);
+
+                var nuevoBicicleta = _bicicletaService.Create(bicicletaCreateRequest, clienteId);
                 return CreatedAtAction(nameof(GetById), new { id = nuevoBicicleta.Id }, nuevoBicicleta);
             }
             catch (NotFoundException ex)
@@ -55,8 +91,24 @@ namespace Web.Controller
             }
         }
 
+        [HttpPost("{clienteId}")]
+        [Authorize(Roles = "SysAdmin")]
+        public ActionResult<Bicicleta> CreateByAdmin([FromRoute]int clienteId, [FromBody] BicicletaCreateRequest bicicletaCreateRequest)
+        {
+            try
+            {
+                var nuevoBicicleta = _bicicletaService.Create(bicicletaCreateRequest, clienteId);
+                return CreatedAtAction(nameof(GetById), new { id = nuevoBicicleta.Id }, nuevoBicicleta);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "SysAdmin, Cliente")]
+        //q updatee las suyas
         public IActionResult Update([FromRoute] int id, [FromBody] BicicletaUpdateRequest bicicletaUpdateRequest)
         {
             try
@@ -72,6 +124,8 @@ namespace Web.Controller
 
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "SysAdmin, Cliente")]
+        //q solo borre las suyas
         public IActionResult Delete([FromRoute] int id)
         {
             try
@@ -87,6 +141,8 @@ namespace Web.Controller
 
 
         [HttpGet("clientes/{clienteId}")]
+        [Authorize(Roles = "Cliente")]
+        //cambiar nombre y agregar el de sysamdin
         public ActionResult<List<Bicicleta>> GetBicicletasConClientes(int clienteId)
         {
             var bicicletasConClientes = _bicicletaService.GetBicicletasConClientes(clienteId);

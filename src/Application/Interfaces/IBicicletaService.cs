@@ -13,11 +13,11 @@ namespace Application.Interfaces
     {
         void Delete(int id);
         List<BicicletaDTO> GetAll();
-        BicicletaDTO GetById(int id);
+        BicicletaDTO GetById(int id, int clienteId);
 
         void Update(int id, BicicletaUpdateRequest bicicletaUpdateRequest);
 
-        BicicletaDTO Create(BicicletaCreateRequest bicicletaCreateRequest);
+        BicicletaDTO Create(BicicletaCreateRequest bicicletaCreateRequest, int clienteIdToken);
 
         List<Bicicleta> GetBicicletasConClientes(int clienteId);
     }

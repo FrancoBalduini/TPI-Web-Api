@@ -17,22 +17,34 @@ namespace Application.Services
     {
             private readonly IBicicletaRepository _bicicletaRepository;
             private readonly IMapper _mapper;
+            private readonly IClienteRepository _clienteRepository;
         
-            public BicicletaService(IBicicletaRepository BicicletaRepository, IMapper mapper)
+            public BicicletaService(IBicicletaRepository BicicletaRepository, IMapper mapper, IClienteRepository clienteRepository)
             {
                 _bicicletaRepository = BicicletaRepository;
                 _mapper = mapper;
+                _clienteRepository = clienteRepository;
             }
 
-            public BicicletaDTO Create(BicicletaCreateRequest bicicletaCreateRequest)
-            {
+        public BicicletaDTO Create(BicicletaCreateRequest bicicletaCreateRequest, int clienteIdToken)
+        {
+            // Buscar el cliente en el repositorio o servicio usando el idToken
+            var cliente = GetCliente(clienteIdToken);
 
-                var bicicleta = _mapper.Map<Bicicleta>(bicicletaCreateRequest);
-                _bicicletaRepository.Add(bicicleta);
-                return _mapper.Map<BicicletaDTO>(bicicleta);
-            }
+            // Mapear el request a la entidad Bicicleta
+            var bicicleta = _mapper.Map<Bicicleta>(bicicletaCreateRequest);
 
-            public void Delete(int id)
+            // Asignar el cliente a la bicicleta
+            bicicleta.Cliente = cliente;
+
+            // Guardar la bicicleta en la base de datos
+            _bicicletaRepository.Add(bicicleta);
+
+            // Devolver el DTO de la bicicleta creada
+            return _mapper.Map<BicicletaDTO>(bicicleta);
+        }
+
+        public void Delete(int id)
             {
                 var bicicleta = _bicicletaRepository.GetById(id) ?? throw new NotFoundException($"No se encontró el ID ingresado: {id}");
                 _bicicletaRepository.Delete(bicicleta);
@@ -45,10 +57,15 @@ namespace Application.Services
                 return _mapper.Map<List<BicicletaDTO>>(bicicletas);
             }
 
-            public BicicletaDTO GetById(int id)
+            public BicicletaDTO GetById(int id, int clienteId)
             {
+                var cliente = GetCliente(clienteId);
+                
                 var bicicleta = _bicicletaRepository.GetById(id) ?? throw new NotFoundException($"No se encontró el ID ingresado: {id}");
+            if (bicicleta.Cliente == cliente)
                 return _mapper.Map<BicicletaDTO>(bicicleta);
+            else
+                throw new NotFoundException($"Esa bicicleta no le pertenece");
             }
 
             public void Update(int id, BicicletaUpdateRequest bicicletaUpdateRequest)
@@ -62,6 +79,16 @@ namespace Application.Services
             {
                 return _bicicletaRepository.GetBicicletasConClientes(clienteId);
             }
-        
+
+
+            public Cliente GetCliente(int clienteId)
+            {
+                var cliente = _clienteRepository.GetByIdToken(clienteId);
+                if (cliente == null)
+                {
+                    throw new NotFoundException("Cliente no encontrado con el idToken proporcionado.");
+                }
+                return cliente;
+            }
     }
 }
