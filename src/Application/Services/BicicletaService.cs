@@ -106,9 +106,12 @@ namespace Application.Services
 
             }
 
-            public List<Bicicleta> GetBicicletasConCliente(int clienteId)
+            public List<BicicletaDTO> GetBicicletasConCliente(int clienteId)
             {
-                return _bicicletaRepository.GetBicicletasConClientes(clienteId);
+                var lista = _bicicletaRepository.GetBicicletasConClientes(clienteId);
+                var listaMostrar = lista.Select(b => BicicletaDTO.Create(b)).ToList();
+
+                return listaMostrar;
             }
 
 

@@ -19,10 +19,12 @@ namespace Infrastructure.Data
         }
 
         // Metodo especifico de taller para traer la lista de talleres con sus respectivos Duenos
-        public List<Taller> GetTallerConDuenos(int DuenoId)
+        public List<Taller> GetTallerConDuenos(int duenoId)
         {
             return _context.Talleres
-                .Where(t => t.DuenoId == DuenoId)
+                .Include(t => t.Mantenimientos)
+                .Include(t => t.Dueno)
+                .Where(t => t.Dueno.Id == duenoId)
                 .ToList();
         }
 

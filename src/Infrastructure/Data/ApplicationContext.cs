@@ -69,6 +69,8 @@ namespace Infrastructure.Data
                 m.HasOne(m => m.Taller)
                 .WithMany(t => t.Mantenimientos)
                 .HasForeignKey(m => m.TallerId);
+
+                
             });
 
             modelBuilder.Entity<Mantenimiento>(m =>

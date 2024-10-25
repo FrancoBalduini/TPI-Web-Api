@@ -20,7 +20,7 @@ namespace Application.Interfaces
         TallerDTO Create(TallerCreateRequest tallerCreateRequest, int duenoIdToken);
 
         // Metodo especifico de taller para traer la lista de talleres con sus respectivos Duenos
-        List<Taller> GetTallerConDuenos(int DuenoId); 
+        List<TallerDTO> GetTallerConDuenos(int DuenoId);
 
 
     }

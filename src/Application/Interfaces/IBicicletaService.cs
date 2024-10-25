@@ -20,6 +20,6 @@ namespace Application.Interfaces
 
         BicicletaDTO Create(BicicletaCreateRequest bicicletaCreateRequest, int clienteIdToken);
 
-        List<Bicicleta> GetBicicletasConCliente(int clienteId);
+        List<BicicletaDTO> GetBicicletasConCliente(int clienteId);
     }
 }

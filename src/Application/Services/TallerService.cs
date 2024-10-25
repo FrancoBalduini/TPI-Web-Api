@@ -92,9 +92,10 @@ namespace Application.Services
 
         }
 
-        public List<Taller> GetTallerConDuenos(int duenoId)
+        public List<TallerDTO> GetTallerConDuenos(int duenoId)
         {
-            return _tallerRepository.GetTallerConDuenos(duenoId);
+            var talleres = _tallerRepository.GetTallerConDuenos(duenoId);
+            return talleres.Select(t => TallerDTO.Create(t)).ToList();
         }
 
         public Dueno GetDueno(int duenoId)

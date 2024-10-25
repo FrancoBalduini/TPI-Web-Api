@@ -8,6 +8,7 @@ using Application.Models;
 using Application.Models.Request;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Exceptions;
 using Domain.Interfaces;
 
@@ -20,20 +21,18 @@ namespace Application.Services
         private readonly IClienteRepository _clienteRepository;
         private readonly IDuenoRepository _duenoRepository;
         private readonly IBicicletaRepository _bicicletaRepository;
+        private readonly ITallerRepository _tallerRepository;
 
 
 
-
-        public MantenimientoService(IMantenimientoRepository repository, IBicicletaRepository BicicletaRepository, IMapper mapper, IDuenoRepository duenoRepository, IClienteRepository clienteRepository)
+        public MantenimientoService(IMantenimientoRepository repository, IBicicletaRepository BicicletaRepository, IMapper mapper, IDuenoRepository duenoRepository, IClienteRepository clienteRepository, ITallerRepository tallerRepository)
         {
             _repository = repository;
             _mapper = mapper;
             _duenoRepository = duenoRepository;
             _clienteRepository = clienteRepository;
             _bicicletaRepository = BicicletaRepository;
-
-
-
+            _tallerRepository = tallerRepository;
         }
 
         public MantenimientoDTO GetById(int id, int userId, string rolUser) 
@@ -47,8 +46,9 @@ namespace Application.Services
             {
                 if (rolUser == "Cliente")
                 {
-                    Cliente cliente = GetCliente(userId);
-                    if (mantenimiento.Bicicleta.Cliente == cliente)
+                    //Tenemos que traer la bici xq no se guarda en mantenimiento
+                    var bicicletaComparar = GetBicicleta((int)mantenimiento.BicicletaId);
+                    if (bicicletaComparar.ClienteId == userId)
                         return _mapper.Map<MantenimientoDTO>(mantenimiento);
                     else
                         throw new NotFoundException($"Esa mantenimiento no le pertenece");
@@ -61,8 +61,6 @@ namespace Application.Services
                     else
                         throw new NotFoundException($"Esa mantenimiento no le pertenece");
                 }
-
-             
             }
             
         }
@@ -95,6 +93,7 @@ namespace Application.Services
                     biciUpdatear.Mantenimientos.Add(mantenimientoAgregar);
                     _repository.Add(mantenimientoAgregar);
                     _bicicletaRepository.Update(biciUpdatear);
+                    _repository.SaveChanges();
                     return _mapper.Map<MantenimientoDTO>(mantenimientoAgregar);
                 }                   
                 else
@@ -103,11 +102,36 @@ namespace Application.Services
             }
         }
 
-        public void Update(int id, MantenimientoUpdateRequest request)
+        public void Update(int id, int loggedId, string rolLogged, MantenimientoUpdateRequest request)
         {
             var mantenimientoUpdatear = _repository.GetById(id) ?? throw new NotFoundException($"No se encontro el id: {id}");
-            _mapper.Map(request, mantenimientoUpdatear);
-            _repository.Update(mantenimientoUpdatear);
+
+            if (rolLogged == "SysAdmin")
+            {
+                _mapper.Map(request, mantenimientoUpdatear);
+                _repository.Update(mantenimientoUpdatear);
+                return;
+            }
+            else if (rolLogged == "Cliente")
+            {
+                if (request.estadoMantenimiento == EstadoMantenimiento.Cancelado)
+                {
+                    _mapper.Map(request, mantenimientoUpdatear);
+                    _repository.Update(mantenimientoUpdatear);
+                    return;
+                }
+                else throw new NotFoundException($"No puede cambiar el estado del mantenimiento a Aceptado/Completado/Pendiente");
+            }
+            else
+            {
+                if (mantenimientoUpdatear.Taller.DuenoId == loggedId)
+                {
+                    _mapper.Map(request, mantenimientoUpdatear);
+                    _repository.Update(mantenimientoUpdatear);
+                    return;
+                }
+                else throw new NotFoundException($"Los mantenimientos no pertenecen a alguno de sus talleres");
+            }   
         }
 
         public void Delete(int id)
@@ -134,6 +158,15 @@ namespace Application.Services
                 throw new NotFoundException("Dueño no encontrado con el idToken proporcionado.");
             }
             return dueno;
+        }
+        public Bicicleta GetBicicleta(int clienteId)
+        {
+            var bicicleta = _bicicletaRepository.GetById(clienteId);
+            if (bicicleta == null)
+            {
+                throw new NotFoundException("Dueño no encontrado con el idToken proporcionado.");
+            }
+            return bicicleta;
         }
     }
 }

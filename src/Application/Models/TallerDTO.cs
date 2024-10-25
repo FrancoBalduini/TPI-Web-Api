@@ -17,7 +17,7 @@ namespace Application.Models
         public string Direccion { get; set; } = string.Empty;
 
         public string DuenoNombre { get; set; } = string.Empty;
-
+        public ICollection<MantenimientoDTO> Mantenimientos { get; set; } = new List<MantenimientoDTO>();
         public static TallerDTO Create(Taller taller)
 
         {
@@ -25,6 +25,7 @@ namespace Application.Models
             dto.Id = taller.Id;
             dto.Nombre = taller.Nombre;
             dto.Direccion = taller.Direccion;
+            dto.Mantenimientos = taller.Mantenimientos.Select(m => MantenimientoDTO.Create(m)).ToList();
             // Si el taller tiene un Dueno, devuelve su nombre completo; si no tiene Dueno, devuelve una cadena vacía.
             dto.DuenoNombre = taller.Dueno != null ? $"{taller.Dueno.Nombre} {taller.Dueno.Apellido}" : string.Empty;
 

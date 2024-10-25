@@ -14,7 +14,7 @@ namespace Application.Interfaces
         MantenimientoDTO? GetById(int id,int clienteId,string rolCliente);
         List<MantenimientoDTO> GetAll();
         MantenimientoDTO Create(MantenimientoCreateRequest request, int clienteId, string rolCliente);
-        void Update(int id, MantenimientoUpdateRequest request);
+        void Update(int id, int loggedId, string rolLogged, MantenimientoUpdateRequest request);
         void Delete(int id);
     }
 }

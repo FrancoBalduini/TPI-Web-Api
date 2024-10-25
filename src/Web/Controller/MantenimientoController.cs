@@ -81,13 +81,21 @@ namespace Web.Controller
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "SysAdmin, Dueno")]
+        [Authorize(Roles = "SysAdmin, Dueno, Cliente")]
         // los personales (hacer endpoint de cliente de cancelar)
         public IActionResult Update([FromRoute] int id, [FromBody] MantenimientoUpdateRequest request)
         {
             try
             {
-                _service.Update(id, request);
+                var rolLogged = User.FindFirst(ClaimTypes.Role)?.Value;
+                var loggedIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (loggedIdClaim == null)
+                {
+                    return Unauthorized("No se pudo encontrar el Id del Usuario.");
+                }
+
+                var loggedId = int.Parse(loggedIdClaim);
+                _service.Update(id, loggedId, rolLogged, request);
                 return NoContent();
             }
             catch   (NotFoundException ex)
