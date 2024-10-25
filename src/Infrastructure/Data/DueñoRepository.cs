@@ -15,5 +15,10 @@ namespace Infrastructure.Data
         {
             _context = context;
         }
+
+        public Dueno GetByIdToken(int idToken)
+        {
+            return _context.Duenos.FirstOrDefault(d => d.Id == idToken);
+        }
     }
 }

@@ -47,7 +47,7 @@ namespace Application.Services
         }
 
         public void Delete(int id, int idLogged, string rolLogged)
-            {
+        {
             var borrar = _bicicletaRepository.GetById(id) ?? throw new NotFoundException($"No se encontró el ID ingresado: {id}");
             if (rolLogged == "SysAdmin")
             {

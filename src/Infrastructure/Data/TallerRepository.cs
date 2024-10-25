@@ -22,7 +22,6 @@ namespace Infrastructure.Data
         public List<Taller> GetTallerConDuenos(int DuenoId)
         {
             return _context.Talleres
-                .Include(t => t.Dueno)
                 .Where(t => t.DuenoId == DuenoId)
                 .ToList();
         }

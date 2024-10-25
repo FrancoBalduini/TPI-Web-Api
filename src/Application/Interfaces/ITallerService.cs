@@ -11,13 +11,13 @@ namespace Application.Interfaces
 {
     public interface ITallerService
     {
-        void Delete(int id);
+        void Delete(int id, int idLogged, string rolLogged);
         List<TallerDTO> GetAll();
-        TallerDTO GetById(int id);
+        TallerDTO GetById(int id, int idLogged, string rolLogged);
 
-        void Update(int id, TallerUpdateRequest tallerUpdateRequest);
+        void Update(int id, int duenoId, string rolCliente, TallerUpdateRequest tallerUpdateRequest);
 
-        TallerDTO Create(TallerCreateRequest tallerCreateRequest);
+        TallerDTO Create(TallerCreateRequest tallerCreateRequest, int duenoIdToken);
 
         // Metodo especifico de taller para traer la lista de talleres con sus respectivos Duenos
         List<Taller> GetTallerConDuenos(int DuenoId); 

@@ -9,6 +9,7 @@ namespace Domain.Interfaces
 {
     public interface IDuenoRepository : IBaseRepository<Dueno>
     {
+        Dueno GetByIdToken(int idToken);
 
     }
 }
