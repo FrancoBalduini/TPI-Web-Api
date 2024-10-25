@@ -54,7 +54,14 @@ namespace Infrastructure.Data
                 e.HasOne(b => b.Cliente)
                  .WithMany(c => c.Bicicletas)
                  .HasForeignKey(b => b.ClienteId);
-                 
+                e.HasMany(b => b.Mantenimientos)
+                 .WithOne(m => m.Bicicleta);
+                //e.HasMany(b => b.Mantenimientos)
+                //.WithOne(m => m.Taller);
+
+
+
+
             });
 
             modelBuilder.Entity<Mantenimiento>(m =>

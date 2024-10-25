@@ -1,12 +1,14 @@
 ﻿using Application.Interfaces;
 using Application.Models;
 using Application.Models.Request;
+using Application.Services;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Web.Controller
 {
@@ -25,15 +27,23 @@ namespace Web.Controller
 
         [HttpGet("{id}")]
         [Authorize(Roles = "SysAdmin, Cliente")]
-        // rol
+        // falta probar con id de user cliente o dueño
         public ActionResult<MantenimientoDTO> GetById([FromRoute] int id) 
         {
             try
             {
-                return _service.GetById(id);
+                var rolCliente = User.FindFirst(ClaimTypes.Role)?.Value;
+                var clienteIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (clienteIdClaim == null)
+                {
+                    return Unauthorized("No se pudo encontrar el Id del cliente.");
+                }
+                var clienteId = int.Parse(clienteIdClaim);
+
+                return _service.GetById(id, clienteId, rolCliente);
             }
-            catch (NotFoundException ex) 
-            { 
+            catch (NotFoundException ex)
+            {
                 return NotFound(ex.Message);
             }
         }
@@ -51,13 +61,23 @@ namespace Web.Controller
         {
             try
             {
-                var mantenimientoCrear = _service.Create(request);
+                var rolCliente = User.FindFirst(ClaimTypes.Role)?.Value;
+                var clienteIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (clienteIdClaim == null)
+                {
+                    return Unauthorized("No se pudo encontrar el Id del cliente.");
+                }
+            
+                var clienteId = int.Parse(clienteIdClaim);
+                var mantenimientoCrear = _service.Create(request, clienteId , rolCliente);
+
                 return CreatedAtAction(nameof(GetById), new { id = mantenimientoCrear.Id }, mantenimientoCrear);
             }
             catch (NotFoundException ex)
             {
                 return NotFound(ex.Message);
             }
+            
         }
 
         [HttpPut("{id}")]
