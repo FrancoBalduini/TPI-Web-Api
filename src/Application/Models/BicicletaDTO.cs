@@ -22,7 +22,6 @@ namespace Application.Models
             dto.Marca = bicicleta.Marca;
             dto.Modelo = bicicleta.Modelo;
             dto.Mantenimientos = bicicleta.Mantenimientos.Select(m => MantenimientoDTO.Create(m)).ToList();
-            // Si el taller tiene un Dueno, devuelve su nombre completo; si no tiene Dueno, devuelve una cadena vacía.
             dto.ClienteNombre = bicicleta.Cliente != null ? $"{bicicleta.Cliente.Nombre} {bicicleta.Cliente.Apellido}" : string.Empty;
 
             return dto;

@@ -57,7 +57,7 @@ namespace Web.Controller
 
 
         [HttpPost]
-        [Authorize(Roles = "SysAdmin, Dueno")]
+        [Authorize(Roles = "Dueno")]
         public ActionResult<Taller> Create([FromBody] TallerCreateRequest tallerCreateRequest)
         {
             try
@@ -149,8 +149,8 @@ namespace Web.Controller
         
         
         [HttpGet("Duenos")]
-        [Authorize(Roles = "SysAdmin, Dueno")]
-        //SysAdmin no tiene mucho sentido, pero se lo dejamos para que pueda probar el endpoint.
+        [Authorize(Roles = "Dueno")]
+        
         public ActionResult<List<Taller>> GetTalleresDelDueno()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

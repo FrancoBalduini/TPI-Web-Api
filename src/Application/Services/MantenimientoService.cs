@@ -46,7 +46,6 @@ namespace Application.Services
             {
                 if (rolUser == "Cliente")
                 {
-                    //Tenemos que traer la bici xq no se guarda en mantenimiento
                     var bicicletaComparar = GetBicicleta((int)mantenimiento.BicicletaId);
                     if (bicicletaComparar.ClienteId == userId)
                         return _mapper.Map<MantenimientoDTO>(mantenimiento);
@@ -55,8 +54,8 @@ namespace Application.Services
                 }
                 else
                 {
-                    Dueno dueno = GetDueno(userId);
-                    if (mantenimiento.Taller.Dueno == dueno)
+                    var tallerComparar = GetTaller((int)mantenimiento.TallerId);
+                    if (tallerComparar.DuenoId == userId)
                         return _mapper.Map<MantenimientoDTO>(mantenimiento);
                     else
                         throw new NotFoundException($"Esa mantenimiento no le pertenece");
@@ -83,7 +82,6 @@ namespace Application.Services
             else
             {
 
-                //Cliente cliente = GetCliente(clienteId);
                 var bicicleta = _bicicletaRepository.GetById(request.BicicletaId) ?? throw new NotFoundException($"No se encontro la bicicleta con el id : {request.BicicletaId}");
                 mantenimientoAgregar.Bicicleta = bicicleta;
                 if (mantenimientoAgregar.Bicicleta.ClienteId == clienteId)
@@ -105,28 +103,27 @@ namespace Application.Services
         public void Update(int id, int loggedId, string rolLogged, MantenimientoUpdateRequest request)
         {
             var mantenimientoUpdatear = _repository.GetById(id) ?? throw new NotFoundException($"No se encontro el id: {id}");
-
+            _mapper.Map(request, mantenimientoUpdatear);
             if (rolLogged == "SysAdmin")
             {
-                _mapper.Map(request, mantenimientoUpdatear);
                 _repository.Update(mantenimientoUpdatear);
                 return;
             }
             else if (rolLogged == "Cliente")
             {
-                if (request.estadoMantenimiento == EstadoMantenimiento.Cancelado)
-                {
-                    _mapper.Map(request, mantenimientoUpdatear);
-                    _repository.Update(mantenimientoUpdatear);
-                    return;
-                }
-                else throw new NotFoundException($"No puede cambiar el estado del mantenimiento a Aceptado/Completado/Pendiente");
+                    var bicicletaComparar = GetBicicleta((int)mantenimientoUpdatear.BicicletaId);
+                    if (request.estadoMantenimiento == EstadoMantenimiento.Cancelado && bicicletaComparar.ClienteId == loggedId)
+                    {
+                        _repository.Update(mantenimientoUpdatear);
+                        return;
+                    }
+                    else throw new NotFoundException($"No puede cambiar el estado del mantenimiento a Aceptado/Completado/Pendiente o ese mantenimiento no le pertenece.");
             }
             else
             {
-                if (mantenimientoUpdatear.Taller.DuenoId == loggedId)
+                var tallerComparar = GetTaller((int)mantenimientoUpdatear.TallerId);
+                if (tallerComparar.DuenoId == loggedId)
                 {
-                    _mapper.Map(request, mantenimientoUpdatear);
                     _repository.Update(mantenimientoUpdatear);
                     return;
                 }
@@ -140,25 +137,6 @@ namespace Application.Services
             _repository.Delete(borrar);
         }
 
-        public Cliente GetCliente(int clienteId)
-        {
-            var cliente = _clienteRepository.GetByIdToken(clienteId);
-            if (cliente == null)
-            {
-                throw new NotFoundException("Cliente no encontrado con el idToken proporcionado.");
-            }
-            return cliente;
-        }
-
-        public Dueno GetDueno(int duenoId)
-        {
-            var dueno = _duenoRepository.GetByIdToken(duenoId);
-            if (dueno == null)
-            {
-                throw new NotFoundException("Dueño no encontrado con el idToken proporcionado.");
-            }
-            return dueno;
-        }
         public Bicicleta GetBicicleta(int clienteId)
         {
             var bicicleta = _bicicletaRepository.GetById(clienteId);
@@ -167,6 +145,16 @@ namespace Application.Services
                 throw new NotFoundException("Dueño no encontrado con el idToken proporcionado.");
             }
             return bicicleta;
+        }
+
+        public Taller GetTaller(int userId)
+        {
+            var taller = _tallerRepository.GetById(userId);
+            if (taller == null)
+            {
+                throw new NotFoundException("Dueño no encontrado con el idToken proporcionado.");
+            }
+            return taller;
         }
     }
 }

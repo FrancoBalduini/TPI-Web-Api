@@ -12,6 +12,7 @@ using Domain.Exceptions;
 using Domain.Interfaces;
 using System.Security.Claims;
 using Domain.Enums;
+using System.Collections;
 
 namespace Application.Services
 {
@@ -33,16 +34,12 @@ namespace Application.Services
             // Buscar el cliente en el repositorio o servicio usando el idToken
             var cliente = GetCliente(clienteIdToken);
 
-            // Mapear el request a la entidad Bicicleta
             var bicicleta = _mapper.Map<Bicicleta>(bicicletaCreateRequest);
 
-            // Asignar el cliente a la bicicleta
             bicicleta.Cliente = cliente;
 
-            // Guardar la bicicleta en la base de datos
             _bicicletaRepository.Add(bicicleta);
 
-            // Devolver el DTO de la bicicleta creada
             return _mapper.Map<BicicletaDTO>(bicicleta);
         }
 
@@ -66,7 +63,7 @@ namespace Application.Services
 
             public List<BicicletaDTO> GetAll()
             {
-
+            
                 var bicicletas = _bicicletaRepository.GetAll();
                 return _mapper.Map<List<BicicletaDTO>>(bicicletas);
             }

@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20241026000732_ManejoDeleteUltimate")]
+    partial class ManejoDeleteUltimate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -173,8 +176,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasOne("Domain.Entities.Taller", "Taller")
                         .WithMany("Mantenimientos")
-                        .HasForeignKey("TallerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("TallerId");
 
                     b.Navigation("Bicicleta");
 

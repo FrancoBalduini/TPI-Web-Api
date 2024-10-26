@@ -26,9 +26,6 @@ namespace Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            //modelBuilder.Entity<Cliente>().ToTable("Tabla Clientes");
-            //modelBuilder.Entity<Dueno>().ToTable("Tabla Duenos");
-
             modelBuilder.Entity<Usuario>()
                 .ToTable("Usuarios")  // Mapea toda la jerarquía a la misma tabla "Usuarios"
                 .HasDiscriminator<UserRole>("UserRole")
@@ -43,7 +40,8 @@ namespace Infrastructure.Data
                 // un Dueno puede tener varios talleres, .WithMany(d => d.Talleres) d es Dueno
                 e.HasOne(t => t.Dueno)
                  .WithMany(d => d.Talleres)
-                 .HasForeignKey(t => t.DuenoId); 
+                 .HasForeignKey(t => t.DuenoId)
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Bicicleta>(e =>
@@ -55,43 +53,40 @@ namespace Infrastructure.Data
                  .WithMany(c => c.Bicicletas)
                  .HasForeignKey(b => b.ClienteId);
                 e.HasMany(b => b.Mantenimientos)
-                 .WithOne(m => m.Bicicleta);
-                //e.HasMany(b => b.Mantenimientos)
-                //.WithOne(m => m.Taller);
-
-
-
-
+                 .WithOne(m => m.Bicicleta)
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Mantenimiento>(m =>
             {
                 m.HasOne(m => m.Taller)
                 .WithMany(t => t.Mantenimientos)
-                .HasForeignKey(m => m.TallerId);
-
-                
+                .HasForeignKey(m => m.TallerId)   
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Mantenimiento>(m =>
             {
                 m.HasOne(m => m.Bicicleta)
                 .WithMany(b => b.Mantenimientos)
-                .HasForeignKey(m => m.BicicletaId);
+                .HasForeignKey(m => m.BicicletaId)
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Dueno>(e =>
             {
                 e.HasMany(d => d.Talleres)
                 .WithOne(t => t.Dueno)
-                .HasForeignKey(t => t.DuenoId);
+                .HasForeignKey(t => t.DuenoId)
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Cliente>(e =>
             {
                 e.HasMany(d => d.Bicicletas)
                 .WithOne(t => t.Cliente)
-                .HasForeignKey(t => t.ClienteId);
+                .HasForeignKey(t => t.ClienteId)
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
 

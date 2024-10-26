@@ -13,16 +13,9 @@ namespace Web.Controller
 
         public AuthenticationController(IAuthenticationService authenticationService)
         {
-            _authenticationService = authenticationService; //Inyectamos el servicio de autenticación
+            _authenticationService = authenticationService;
         }
 
-        /// <summary>
-        /// Authenticates a user.
-        /// </summary>
-        /// <remarks>
-        /// Returns a JWT token for the user logged in, with a role claim matching the userType passed in the body.
-        /// UserType value must be "Dueno", "Cliente" or "SysAdmin", case sensitive.
-        /// </remarks>
         [HttpPost("authenticate")]
         public ActionResult<string> Autenticar(AuthenticationRequest authenticationRequest)
         {

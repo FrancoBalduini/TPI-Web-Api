@@ -72,8 +72,7 @@ namespace Web.Controller
         }
 
         [HttpPut()]
-        [Authorize(Roles = "Dueno, SysAdmin")]
-        //SysAdmin no tiene mucho sentido, pero se lo dejamos para que pueda probar el endpoint.
+        [Authorize(Roles = "Dueno")]
         public IActionResult UpdatePersonal([FromBody] DuenoUpdateRequest duenoUpdateRequest)
         {
             try

@@ -12,7 +12,7 @@ using System.Security.Claims;
 
 namespace Web.Controller
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[Action]")]
     [ApiController]
     public class MantenimientoController : ControllerBase
     {
@@ -26,8 +26,7 @@ namespace Web.Controller
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "SysAdmin, Cliente")]
-        // falta probar con id de user cliente o dueño
+        [Authorize(Roles = "SysAdmin, Cliente, Dueno")]
         public ActionResult<MantenimientoDTO> GetById([FromRoute] int id) 
         {
             try
@@ -82,7 +81,6 @@ namespace Web.Controller
 
         [HttpPut("{id}")]
         [Authorize(Roles = "SysAdmin, Dueno, Cliente")]
-        // los personales (hacer endpoint de cliente de cancelar)
         public IActionResult Update([FromRoute] int id, [FromBody] MantenimientoUpdateRequest request)
         {
             try
@@ -118,6 +116,5 @@ namespace Web.Controller
                 return NotFound(ex.Message);
             }
         } 
-        //hacer endpoint de cancelar mantenimiento
     }
 }

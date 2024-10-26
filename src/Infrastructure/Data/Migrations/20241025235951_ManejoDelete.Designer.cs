@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20241025235951_ManejoDelete")]
+    partial class ManejoDelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -158,8 +161,7 @@ namespace Infrastructure.Data.Migrations
                 {
                     b.HasOne("Domain.Entities.Cliente", "Cliente")
                         .WithMany("Bicicletas")
-                        .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ClienteId");
 
                     b.Navigation("Cliente");
                 });
@@ -173,8 +175,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasOne("Domain.Entities.Taller", "Taller")
                         .WithMany("Mantenimientos")
-                        .HasForeignKey("TallerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("TallerId");
 
                     b.Navigation("Bicicleta");
 
@@ -185,8 +186,7 @@ namespace Infrastructure.Data.Migrations
                 {
                     b.HasOne("Domain.Entities.Dueno", "Dueno")
                         .WithMany("Talleres")
-                        .HasForeignKey("DuenoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("DuenoId");
 
                     b.Navigation("Dueno");
                 });
