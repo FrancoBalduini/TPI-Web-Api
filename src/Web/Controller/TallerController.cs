@@ -25,7 +25,7 @@ namespace Web.Controller
 
         
         [HttpGet]
-        [Authorize(Roles = "SysAdmin")]
+        [Authorize(Roles = "SysAdmin, Cliente")]
         public ActionResult<List<TallerDTO>> GetAll()
         {
             return _tallerService.GetAll();
